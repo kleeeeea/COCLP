@@ -17,6 +17,7 @@ from .train_label import TrainBertNode, InferenceBertNode
 from .unzip_node import UNZIP
 from .whisper_novad_node import WhisperNoVADTranscribeNode
 from .preview_dir_node import PreviewOutputDir
+from .compare_diff_node import CompareTextDiff
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -44,6 +45,7 @@ NODE_CLASS_MAPPINGS = {
     "UNZIP": UNZIP,
     "WhisperNoVADTranscribeNode": WhisperNoVADTranscribeNode,
     "PreviewOutputDir": PreviewOutputDir,
+    "CompareTextDiff": CompareTextDiff,
 
 }
 
@@ -81,6 +83,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "UNZIP": "压缩包解压",
     "WhisperNoVADTranscribeNode": "Whisper 批量转写节点 (含VAD+简体)",
     "PreviewOutputDir": "预览输出目录",
+    "CompareTextDiff": "清洗前后对比",
 }
 
 

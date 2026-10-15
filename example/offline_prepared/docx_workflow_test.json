@@ -2,7 +2,7 @@
   "id": "0ff1e5a0-d0c5-4b1d-9c3e-5c2e7a1b0d01",
   "revision": 0,
   "last_node_id": 17,
-  "last_link_id": 21,
+  "last_link_id": 23,
   "nodes": [
     {
       "id": 8,
@@ -33,7 +33,7 @@
           "name": "SIGNAL",
           "type": "SIGNAL",
           "links": [
-            7
+            22
           ]
         }
       ],
@@ -114,7 +114,8 @@
           "name": "jsonl_path",
           "type": "STRING",
           "links": [
-            2
+            2,
+            23
           ]
         }
       ],
@@ -227,7 +228,6 @@
           "name": "out_path",
           "type": "STRING",
           "links": [
-            15,
             20
           ]
         }
@@ -248,68 +248,6 @@
       "title": "文档批量分类 (ecnu-plus)"
     },
     {
-      "id": 12,
-      "type": "BatchGenerateQANode",
-      "pos": [
-        3053.691162109375,
-        686.0162963867188
-      ],
-      "size": [
-        270,
-        222
-      ],
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "input_folder",
-          "type": "STRING",
-          "widget": {
-            "name": "input_folder"
-          },
-          "link": 15
-        },
-        {
-          "name": "api_url",
-          "type": "STRING",
-          "widget": {
-            "name": "api_url"
-          },
-          "link": 16
-        }
-      ],
-      "outputs": [
-        {
-          "label": "qa_jsonl_path",
-          "name": "qa_jsonl_path",
-          "type": "STRING",
-          "links": [
-            21
-          ]
-        },
-        {
-          "label": "shard_folder",
-          "name": "shard_folder",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "BatchGenerateQANode"
-      },
-      "widgets_values": [
-        "",
-        "../example/offline_prepared/output/QA",
-        "None",
-        "",
-        "ecnu-plus",
-        2,
-        100
-      ],
-      "title": "问答对生成 (ecnu-plus)"
-    },
-    {
       "id": 13,
       "type": "GroupExecutorSender",
       "pos": [
@@ -327,7 +265,7 @@
         {
           "name": "signal",
           "type": "SIGNAL",
-          "link": 17
+          "link": 22
         }
       ],
       "outputs": [],
@@ -339,51 +277,6 @@
       },
       "widgets_values": [],
       "title": "流水线执行器"
-    },
-    {
-      "id": 9,
-      "type": "GroupExecutorSingle",
-      "pos": [
-        2087.244384765625,
-        280.0938415527344
-      ],
-      "size": [
-        270,
-        106
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "signal",
-          "name": "signal",
-          "shape": 7,
-          "type": "SIGNAL",
-          "link": 7
-        }
-      ],
-      "outputs": [
-        {
-          "label": "SIGNAL",
-          "name": "SIGNAL",
-          "type": "SIGNAL",
-          "links": [
-            17
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "GroupExecutorSingle",
-        "aux_id": "LAOGOU-666/Comfyui-LG_GroupExecutor",
-        "ver": "be6e4b127f3a668881a1be3b353bb272ccd033eb"
-      },
-      "widgets_values": [
-        "问答对生成",
-        1,
-        1
-      ],
-      "title": "执行组: 问答对生成"
     },
     {
       "id": 6,
@@ -405,8 +298,7 @@
           "name": "append_text",
           "type": "STRING",
           "links": [
-            12,
-            16
+            12
           ]
         }
       ],
@@ -457,39 +349,44 @@
     },
     {
       "id": 15,
-      "type": "PreviewOutputDir",
-      "title": "预览: 清洗后结果",
+      "type": "CompareTextDiff",
+      "title": "清洗前后对比 (高亮差异)",
       "pos": [
         1763.34375,
         1293.5189208984375
       ],
       "size": [
         420,
-        360
+        460
       ],
       "flags": {},
       "order": 99,
       "mode": 0,
       "inputs": [
         {
-          "name": "dir_path",
+          "name": "before_dir",
+          "type": "STRING",
+          "link": 23
+        },
+        {
+          "name": "after_dir",
           "type": "STRING",
           "link": 19
         }
       ],
       "outputs": [
         {
-          "name": "preview_text",
+          "name": "对比摘要",
           "type": "STRING",
           "links": null
         }
       ],
       "properties": {
-        "Node name for S&R": "PreviewOutputDir"
+        "Node name for S&R": "CompareTextDiff"
       },
       "widgets_values": [
         3,
-        2000
+        40
       ]
     },
     {
@@ -528,43 +425,6 @@
         3,
         2000
       ]
-    },
-    {
-      "id": 17,
-      "type": "PreviewOutputDir",
-      "title": "预览: QA 结果",
-      "pos": [
-        3029.775390625,
-        1009.2132568359375
-      ],
-      "size": [
-        420,
-        360
-      ],
-      "flags": {},
-      "order": 99,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "dir_path",
-          "type": "STRING",
-          "link": 21
-        }
-      ],
-      "outputs": [
-        {
-          "name": "preview_text",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PreviewOutputDir"
-      },
-      "widgets_values": [
-        3,
-        2000
-      ]
     }
   ],
   "links": [
@@ -585,14 +445,6 @@
       "STRING"
     ],
     [
-      7,
-      8,
-      0,
-      9,
-      0,
-      "SIGNAL"
-    ],
-    [
       11,
       4,
       0,
@@ -607,30 +459,6 @@
       11,
       1,
       "STRING"
-    ],
-    [
-      15,
-      11,
-      0,
-      12,
-      0,
-      "STRING"
-    ],
-    [
-      16,
-      6,
-      0,
-      12,
-      1,
-      "STRING"
-    ],
-    [
-      17,
-      9,
-      0,
-      13,
-      0,
-      "SIGNAL"
     ],
     [
       18,
@@ -645,7 +473,7 @@
       4,
       0,
       15,
-      0,
+      1,
       "STRING"
     ],
     [
@@ -657,10 +485,18 @@
       "STRING"
     ],
     [
-      21,
-      12,
+      22,
+      8,
       0,
-      17,
+      13,
+      0,
+      "SIGNAL"
+    ],
+    [
+      23,
+      3,
+      0,
+      15,
       0,
       "STRING"
     ]
@@ -673,20 +509,7 @@
         1303.34375,
         547.540283203125,
         1504.126953125,
-        1165.9786376953125
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 2,
-      "title": "问答对生成",
-      "bounding": [
-        3009.775390625,
-        576.759033203125,
-        460,
-        852.4542236328125
+        1265.9786376953125
       ],
       "color": "#3f789e",
       "font_size": 24,
