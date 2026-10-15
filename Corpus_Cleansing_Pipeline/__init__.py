@@ -27,6 +27,7 @@ from .text_normalizer_node import TextNormalizer
 from .privacy_detection_node import PIIRuleEngine, PIINerEngine, PIIMerge, PassThroughDir
 from .desensitize_node import Desensitizer
 from .human_audit_node import HumanSampleAudit
+from .quality_control_node import QualityAssess, GoldenLabelCheck, ExpertSampleReview
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -69,6 +70,9 @@ NODE_CLASS_MAPPINGS = {
     "PassThroughDir": PassThroughDir,
     "Desensitizer": Desensitizer,
     "HumanSampleAudit": HumanSampleAudit,
+    "QualityAssess": QualityAssess,
+    "GoldenLabelCheck": GoldenLabelCheck,
+    "ExpertSampleReview": ExpertSampleReview,
 
 }
 
@@ -121,6 +125,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PassThroughDir": "语料输入",
     "Desensitizer": "脱敏处理",
     "HumanSampleAudit": "人工抽样审计 (阻塞等待审核)",
+    "QualityAssess": "质量评估 (规则 + 模型评审)",
+    "GoldenLabelCheck": "黄金集质控 (五维标注)",
+    "ExpertSampleReview": "专家抽样审核 (阻塞等待审核)",
 }
 
 

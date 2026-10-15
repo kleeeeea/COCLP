@@ -1,0 +1,86 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  216,
+  308,
+  2928,
+  1354
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "PassThroughDir",
+   "title": "批次语料输入 (已五维标注)",
+   "box": [
+    299,
+    406,
+    594,
+    178
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PromptTextEditor",
+   "title": "模型接口地址 (ecnu-plus)",
+   "box": [
+    299,
+    673,
+    594,
+    282
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PassThroughDir",
+   "title": "黄金集输入 (v1.0, 专家确认)",
+   "box": [
+    299,
+    1030,
+    594,
+    178
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "QualityAssess",
+   "title": "质量评估 (规则 5 维 + ecnu-plus 评审) · 批次质量报告",
+   "box": [
+    1012,
+    406,
+    1069,
+    1173
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "GoldenLabelCheck",
+   "title": "黄金集质控 (五维标注) · 退返单",
+   "box": [
+    2170,
+    406,
+    891,
+    1173
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "质量评估与黄金集质控: 自动评估分档 + 黄金集比对退返",
+   "box": [
+    240,
+    332,
+    2880,
+    1306
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

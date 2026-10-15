@@ -1,0 +1,255 @@
+{
+  "id": "0ff1e5a0-9c01-4b1d-9c3e-5c2e7a1b0d12",
+  "revision": 0,
+  "last_node_id": 5,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "PassThroughDir",
+      "title": "批次语料输入 (已五维标注)",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        400,
+        90
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "语料目录",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PassThroughDir"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/quality_control/data/batch"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "PromptTextEditor",
+      "title": "模型接口地址 (ecnu-plus)",
+      "pos": [
+        0,
+        180
+      ],
+      "size": [
+        400,
+        160
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "append_text",
+          "type": "STRING",
+          "links": [
+            2,
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PromptTextEditor"
+      },
+      "widgets_values": [
+        "https://chat.ecnu.edu.cn/open/api/v1"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "PassThroughDir",
+      "title": "黄金集输入 (v1.0, 专家确认)",
+      "pos": [
+        0,
+        420
+      ],
+      "size": [
+        400,
+        90
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "语料目录",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PassThroughDir"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/quality_control/data/golden"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "QualityAssess",
+      "title": "质量评估 (规则 5 维 + ecnu-plus 评审) · 批次质量报告",
+      "pos": [
+        480,
+        0
+      ],
+      "size": [
+        720,
+        760
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "batch_dir",
+          "type": "STRING",
+          "link": 1
+        },
+        {
+          "name": "api_url",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "评估结果目录",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "QualityAssess"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/quality_control/output/quality",
+        "None",
+        "ecnu-plus",
+        0.8,
+        0.6,
+        0.4
+      ]
+    },
+    {
+      "id": 5,
+      "type": "GoldenLabelCheck",
+      "title": "黄金集质控 (五维标注) · 退返单",
+      "pos": [
+        1260,
+        0
+      ],
+      "size": [
+        600,
+        760
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "golden_dir",
+          "type": "STRING",
+          "link": 3
+        },
+        {
+          "name": "api_url",
+          "type": "STRING",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "质控结果目录",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GoldenLabelCheck"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/quality_control/output/golden",
+        "None",
+        "ecnu-plus",
+        0.9
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      1,
+      "STRING"
+    ],
+    [
+      3,
+      3,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      2,
+      0,
+      5,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "质量评估与黄金集质控: 自动评估分档 + 黄金集比对退返",
+      "bounding": [
+        -40,
+        -80,
+        1940,
+        880
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

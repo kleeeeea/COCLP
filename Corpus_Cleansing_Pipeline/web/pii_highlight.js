@@ -15,8 +15,19 @@ const STYLE = `
 .coclp-pii-box .coclp-pii-tag { font-size: 9px; color: #c0262d; opacity: 0.75; margin: 0 2px 0 1px; vertical-align: super; }
 .coclp-pii-box del.coclp-del { background: #fde2e2; color: #c0262d; text-decoration: line-through; }
 .coclp-pii-box ins.coclp-ins { background: #dcf5e3; color: #127a3a; text-decoration: none; font-weight: 600; }
+.coclp-pii-box .q-a { color: #127a3a; font-weight: 700; }
+.coclp-pii-box .q-b { color: #b45309; font-weight: 700; }
+.coclp-pii-box .q-c { color: #c0262d; font-weight: 700; }
+.coclp-pii-box table.coclp-table { width: 100%; border-collapse: collapse; white-space: normal; margin-top: 4px; }
+.coclp-pii-box .coclp-table th, .coclp-pii-box .coclp-table td { border: 1px solid var(--border-color, #ddd);
+  padding: 2px 5px; text-align: left; vertical-align: top; }
+.coclp-pii-box .coclp-table th { background: rgba(0, 0, 0, 0.04); white-space: nowrap; }
+.coclp-pii-box .coclp-table td:not(:last-child) { white-space: nowrap; }  /* ID/语料/总分/档 不折行, 原因列自动换行 */
+.coclp-pii-box .coclp-retour { margin-top: 6px; padding: 6px 8px; border-radius: 4px; background: #fde2e2; color: #c0262d; }
+.coclp-pii-box .coclp-pass { margin-top: 6px; padding: 6px 8px; border-radius: 4px; background: #dcf5e3; color: #127a3a; }
 `;
-const NODE_TYPES = ["PIIMerge", "Desensitizer"];
+// 4.1 隐私检测合并、4.2 脱敏、6.1 质量评估 / 黄金集质控 都用这个面板显示 ui.html
+const NODE_TYPES = ["PIIMerge", "Desensitizer", "QualityAssess", "GoldenLabelCheck"];
 const PANEL_HEIGHT = 340;
 
 app.registerExtension({
