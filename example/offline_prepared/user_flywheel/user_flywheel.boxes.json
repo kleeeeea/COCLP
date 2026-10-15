@@ -1,0 +1,75 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  876,
+  308,
+  1608,
+  1636
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "UserFeedbackLogParser",
+   "title": "用户反馈日志解析",
+   "box": [
+    957,
+    686,
+    567,
+    255
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: 原始网站日志",
+   "box": [
+    1609,
+    403,
+    794,
+    581
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "FeedbackToSFT",
+   "title": "反馈转 SFT 样本",
+   "box": [
+    957,
+    1424,
+    567,
+    326
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: SFT 训练样本",
+   "box": [
+    1609,
+    1055,
+    794,
+    638
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "用户贡献采集 (网站日志 → SFT 训练样本)",
+   "box": [
+    900,
+    332,
+    1560,
+    1588
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

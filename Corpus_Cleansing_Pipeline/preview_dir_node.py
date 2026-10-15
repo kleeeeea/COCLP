@@ -15,6 +15,13 @@ def format_record(index, obj, max_chars):
     for key, value in obj.items():
         if key in HIDDEN_KEYS or key in LONG_TEXT_KEYS:
             continue
+        if key == "messages" and isinstance(value, list):  # SFT 对话样本: 每轮一段, 正文原样换行
+            lines.append("messages:")
+            for m in value:
+                if isinstance(m, dict):
+                    head = f"  [{m.get('role', '?')}] "
+                    lines.append(head + str(m.get("content", "")).replace("\n", "\n" + " " * len(head)))
+            continue
         if key == "id" and isinstance(value, str) and len(value) > 16:
             value = value[:12] + "…"
         if not isinstance(value, str):
