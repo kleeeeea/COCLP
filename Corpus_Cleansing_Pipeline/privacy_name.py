@@ -3,6 +3,7 @@ import json
 import random
 from pathlib import Path
 from openai import OpenAI
+from .llm_utils import resolve_api_key, chat_extract_list
 
 class AnonymizeChineseNamesNode:
     """
@@ -25,6 +26,9 @@ class AnonymizeChineseNamesNode:
                 }),
                 "api_key": ("STRING", {"multiline": False}),
                 "api_url": ("STRING", {"multiline": False}),
+            },
+            "optional": {
+                "model_name": ("STRING", {"default": "qwen", "multiline": False}),
             }
         }
 
@@ -40,7 +44,7 @@ class AnonymizeChineseNamesNode:
     def get_client(self, api_config_str):
         try:
             config = json.loads(api_config_str)
-            api_key = config.get("api_key")
+            api_key = resolve_api_key(config.get("api_key"))
             base_url = config.get("base_url")
             return OpenAI(api_key=api_key, base_url=base_url)
         except Exception as e:
@@ -72,19 +76,7 @@ class AnonymizeChineseNamesNode:
             "只返回严格的JSON数组，不要解释或输出其他内容。"
         )
         user_prompt = f"请从以下文本中提取所有人名，返回JSON列表：\n{text}"
-        try:
-            response = client.chat.completions.create(
-                model="qwen",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
-                temperature=0
-            )
-            answer = response.choices[0].message.content
-            return json.loads(answer)
-        except Exception:
-            return []
+        return chat_extract_list(client, self.model_name, system_prompt, user_prompt)
 
     def split_text(self, text, chunk_size=4000):
         return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
@@ -94,7 +86,8 @@ class AnonymizeChineseNamesNode:
             text = text.replace(real_name, fake_name)
         return text
 
-    def process(self, input_folder, output_folder, api_key, api_url):
+    def process(self, input_folder, output_folder, api_key, api_url, model_name="qwen"):
+        self.model_name = model_name
         input_path = Path(input_folder)
         output_path = Path(output_folder)
         output_path.mkdir(parents=True, exist_ok=True)

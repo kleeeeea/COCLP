@@ -46,7 +46,11 @@ class WhisperNoVADTranscribeNode:
             raise RuntimeError(f"Failed to load audio: {e}")
 
     def run(self, input_dir, model_path, output_dir, language, beam_size, device, output_filename):
-        model = WhisperModel(model_path, device=device, compute_type="float16")
+        # CPU (如 Mac, 没有 CUDA) 不支持 float16; 用 int8 + 全部核, 否则 fp32 单线程解码非常慢
+        if device == "cuda":
+            model = WhisperModel(model_path, device=device, compute_type="float16")
+        else:
+            model = WhisperModel(model_path, device=device, compute_type="int8", cpu_threads=os.cpu_count())
         valid_exts = [".wav", ".mp3", ".m4a", ".flac", ".aac"]
         os.makedirs(output_dir, exist_ok=True)
 
@@ -59,6 +63,7 @@ class WhisperNoVADTranscribeNode:
             for fname in audio_files:
                 file_path = os.path.join(input_dir, fname)
                 file_id = os.path.splitext(fname)[0]
+                id = self._hash_path_to_id(file_path)  # 放在 try 前, 出错分支也要用
                 try:
                     with open(file_path, "rb") as f:
                         wav_bytes = f.read()
@@ -71,9 +76,7 @@ class WhisperNoVADTranscribeNode:
                         word_timestamps=False,
                         condition_on_previous_text=True
                     )
-                    
-                    id=self._hash_path_to_id(file_path)
-                    
+
                     full_text = cc.convert("".join([seg.text for seg in segments]).strip())
                     json.dump({"id":id, "audio_path":file_path, "audio_id": file_id, "text": full_text}, out_f, ensure_ascii=False)
                     out_f.write("\n")

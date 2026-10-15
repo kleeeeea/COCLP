@@ -1,0 +1,215 @@
+{
+  "id": "7a1d2e3f-4b5c-4d6e-8f90-a1b2c3d4e5f6",
+  "revision": 0,
+  "last_node_id": 13,
+  "last_link_id": 3,
+  "nodes": [
+    {
+      "id": 11,
+      "type": "WhisperNoVADTranscribeNode",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        330.2710876464844,
+        202
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "transcription",
+          "type": "STRING",
+          "links": [
+            1,
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WhisperNoVADTranscribeNode"
+      },
+      "widgets_values": [
+        "../example/test_out/asr_clip",
+        "small",
+        "../example/test_out/simple_asr/whisper",
+        "all_transcripts.jsonl",
+        "zh",
+        5,
+        "cpu"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "MultiPruner",
+      "pos": [
+        460,
+        0
+      ],
+      "size": [
+        310.765625,
+        418
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "input_dir",
+          "name": "input_dir",
+          "type": "STRING",
+          "widget": {
+            "name": "input_dir"
+          },
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "label": "输出目录路径",
+          "name": "输出目录路径",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MultiPruner"
+      },
+      "widgets_values": [
+        "",
+        "../example/test_out/simple_asr/clean",
+        1,
+        10,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": 12,
+      "type": "PreviewOutputDir",
+      "title": "预览: Whisper 转写",
+      "pos": [
+        0,
+        480
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        3,
+        2000
+      ]
+    },
+    {
+      "id": 13,
+      "type": "PreviewOutputDir",
+      "title": "预览: 规则清洗后",
+      "pos": [
+        460,
+        480
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        3,
+        2000
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      11,
+      0,
+      8,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      11,
+      0,
+      12,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      8,
+      0,
+      13,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        50,
+        50
+      ]
+    }
+  },
+  "version": 0.4
+}

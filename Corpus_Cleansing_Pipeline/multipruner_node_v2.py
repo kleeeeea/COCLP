@@ -62,10 +62,18 @@ class ShortLengthFilter:
 
 class IntegratedPruner:
     # Markdown 清洗相关属性
-    img_pat = re.compile(r'!\[([^\n\r]*?)\]\(([^()\s]+)?\)')
-    url_pat = re.compile(r'\[([^\n\r]*?)\]\(([^()\s]+)?\)')
+    # 链接目标允许带空格/引号 (如 word 复制来的 `[讨论](https://... " \t "/Users/.../_blank)`), 只要不跨行、不含 ')'
+    img_pat = re.compile(r'!\[([^\]\n\r]*?)\]\(([^)\n\r]*)\)')
+    url_pat = re.compile(r'\[([^\]\n\r]*?)\]\(([^)\n\r]*)\)')
     error_img_pat = re.compile(r'!\[([^\n\r]*?)\]')
     markdown_repl = ''
+    url_text_repl = r'\1'  # 链接保留锚文字, 只删目标, 避免句子缺词
+    heading_pat = re.compile(r'^[ \t]{0,3}#{1,6}[ \t]+', flags=re.MULTILINE)          # "# 标题" -> "标题"
+    bold_pat = re.compile(r'(\*{2,}|_{2,})(?=\S)(.+?)(?<=\S)\1')                       # **加粗** / ****加粗**** -> 加粗
+    inline_code_pat = re.compile(r'`([^`\n]+)`')                                       # `code` -> code
+    blockquote_pat = re.compile(r'^[ \t]*>[ \t]?', flags=re.MULTILINE)                 # "> 引用" -> "引用"
+    hr_pat = re.compile(r'^[ \t]*([-*_])([ \t]*\1){2,}[ \t]*$', flags=re.MULTILINE)    # --- / *** 分隔线
+    citation_pat = re.compile(r'[^\S\n]*\[\d+(?:[-–]\d+)?\]')                          # 百科引用角标 [2] [4] [1-3] (连同前面的空格/\xa0)
 
     # 邮箱清洗相关属性
     email_pat = re.compile(r'[A-Za-z0-9.\-+_]+@[a-z0-9.\-+_]+\.[a-z]+', re.IGNORECASE)
@@ -161,8 +169,14 @@ class IntegratedPruner:
 
     def clean_markdown_links(self, text: str) -> str:
         text = re.sub(self.img_pat, self.markdown_repl, text)
-        text = re.sub(self.url_pat, self.markdown_repl, text)
+        text = re.sub(self.url_pat, self.url_text_repl, text)
         text = re.sub(self.error_img_pat, self.markdown_repl, text)
+        text = re.sub(self.heading_pat, self.markdown_repl, text)
+        text = re.sub(self.bold_pat, r'\2', text)
+        text = re.sub(self.inline_code_pat, r'\1', text)
+        text = re.sub(self.blockquote_pat, self.markdown_repl, text)
+        text = re.sub(self.hr_pat, self.markdown_repl, text)
+        text = re.sub(self.citation_pat, self.markdown_repl, text)
         return text.strip()
 
     def clean_email(self, text: str) -> str:
@@ -277,15 +291,25 @@ def process_all_files(input_dir, output_dir, pruner, num_processes=None,
     if num_processes is None:
         num_processes = multiprocessing.cpu_count()
     
+    process_func = partial(process_single_file, pruner=pruner, output_path=output_dir, enable_markdown=enable_markdown, enable_email=enable_email, enable_link=enable_link,
+                        enable_ip=enable_ip, enable_control_char=enable_control_char,
+                        enable_repeat_space=enable_repeat_space, enable_punctuation_clip=enable_punctuation_clip,
+                        enable_text_circled=enable_text_circled, enable_filename=enable_filename,
+                        enable_repeat_char=enable_repeat_char, enable_html=enable_html,
+                        enable_answer_sheet_filter=enable_answer_sheet_filter,
+                        min_text_length=min_text_length)
+
+    # 单进程直接串行, 不起进程池
+    if num_processes <= 1:
+        for json_file in tqdm(jsonl_files, desc="Pruning files"):
+            process_func(json_file)
+        print(f"处理完成。结果保存至 {output_dir}")
+        return
+
+    # macOS 默认 spawn 会在子进程里重新执行 ComfyUI 的 main.py (并撞上 custom_nodes 里同名的 utils.py), 这里显式用 fork
+    start_method = "fork" if "fork" in multiprocessing.get_all_start_methods() else None
     # Use tqdm for progress tracking in the main process
-    with multiprocessing.Pool(processes=num_processes) as pool:
-        process_func = partial(process_single_file, pruner=pruner, output_path=output_dir, enable_markdown=enable_markdown, enable_email=enable_email, enable_link=enable_link,
-                            enable_ip=enable_ip, enable_control_char=enable_control_char,
-                            enable_repeat_space=enable_repeat_space, enable_punctuation_clip=enable_punctuation_clip,
-                            enable_text_circled=enable_text_circled, enable_filename=enable_filename,
-                            enable_repeat_char=enable_repeat_char, enable_html=enable_html,
-                            enable_answer_sheet_filter=enable_answer_sheet_filter,
-                            min_text_length=min_text_length)
+    with multiprocessing.get_context(start_method).Pool(processes=num_processes) as pool:
         list(tqdm(pool.imap(process_func, jsonl_files), total=len(jsonl_files), desc=f"Pruning files"))
 
     print(f"处理完成。结果保存至 {output_dir}")

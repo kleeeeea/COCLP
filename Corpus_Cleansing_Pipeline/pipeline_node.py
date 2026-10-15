@@ -5,6 +5,7 @@ import threading
 from pathlib import Path
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from .llm_utils import resolve_api_key, is_offline_prepared
 
 
 # --------------------------------------------------------------------------
@@ -242,8 +243,12 @@ class BatchProcessDocumentsNode:
 
         if not trigger:
             return ("等待触发...",)
+        if is_offline_prepared(output_folder):
+            print(f"[离线回放] 分类结果已预先生成, 跳过大模型调用: {output_folder}")
+            return (output_folder,)
 
         self.model_name = model_name  # ✅ 设置当前模型名
+        api_key = resolve_api_key(api_key)  # 控件填 None 时读环境变量 ECNU_API_KEY
         api_connections=json.dumps([
                 {"api_key": api_key, "base_url": api_url},
                 {"api_key": api_key, "base_url": api_url}

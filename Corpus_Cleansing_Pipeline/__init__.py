@@ -16,6 +16,10 @@ from .text_node import PromptTextEditor
 from .train_label import TrainBertNode, InferenceBertNode
 from .unzip_node import UNZIP
 from .whisper_novad_node import WhisperNoVADTranscribeNode
+from .preview_dir_node import PreviewOutputDir
+
+# web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
+WEB_DIRECTORY = "./web"
 
 
 NODE_CLASS_MAPPINGS = {
@@ -38,9 +42,21 @@ NODE_CLASS_MAPPINGS = {
     "TrainBertNode": TrainBertNode,
     "InferenceBertNode": InferenceBertNode,
     "UNZIP": UNZIP,
-    "WhisperNoVADTranscribeNode": WhisperNoVADTranscribeNode
-    
+    "WhisperNoVADTranscribeNode": WhisperNoVADTranscribeNode,
+    "PreviewOutputDir": PreviewOutputDir,
+
 }
+
+
+def _request_all_lazy_inputs(self, **kwargs):
+    """节点里很多路径参数标了 "lazy": True 却没实现 check_lazy_status,
+    ComfyUI 不会求值这种连线输入 -> 节点收到 None. 这里把仍为 None 的输入全部请求求值"""
+    return [name for name, value in kwargs.items() if value is None]
+
+
+for _node_class in NODE_CLASS_MAPPINGS.values():
+    if not hasattr(_node_class, "check_lazy_status"):
+        _node_class.check_lazy_status = _request_all_lazy_inputs
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -64,6 +80,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "InferenceBertNode": "使用BERT分类器推理",
     "UNZIP": "压缩包解压",
     "WhisperNoVADTranscribeNode": "Whisper 批量转写节点 (含VAD+简体)",
+    "PreviewOutputDir": "预览输出目录",
 }
 
 

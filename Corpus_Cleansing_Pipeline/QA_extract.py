@@ -13,6 +13,7 @@ if project_root not in sys.path:
 
 from pathlib import Path
 from batch import ModelDispatcher, TaskPipeline, JsonlCheckpointer, SmartAPIDispatcher
+from .llm_utils import resolve_api_key, is_offline_prepared
 
 def split_text(text: str, maxlen: int = 2000) -> List[str]:
     return [text[i:i + maxlen] for i in range(0, len(text), maxlen)]
@@ -162,6 +163,14 @@ class BatchGenerateQANode:
 
     def process(self, input_folder, output_folder, api_key, api_url, max_workers, shard_size, model_name):
 
+        if is_offline_prepared(output_folder):
+            qa_files = sorted(Path(output_folder).glob("*_qa.jsonl"))
+            print(f"[离线回放] QA 结果已预先生成, 跳过大模型调用: {output_folder}")
+            if qa_files:
+                return (str(qa_files[0]), str(qa_files[0].with_name(qa_files[0].stem[:-3] + "_flat")))
+            return ("", "")
+
+        api_key = resolve_api_key(api_key)  # 控件填 None 时读环境变量 ECNU_API_KEY
         api_conns=json.dumps([
                 {"api_key": api_key, "base_url": api_url},
                 {"api_key": api_key, "base_url": api_url}
