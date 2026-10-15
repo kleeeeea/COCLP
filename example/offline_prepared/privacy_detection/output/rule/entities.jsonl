@@ -1,0 +1,2 @@
+{"id": "pii-01", "entities": [{"text": "13812345678", "type": "手机号", "start": 51, "end": 62, "engine": "规则"}, {"text": "20231045", "type": "学号", "start": 14, "end": 22, "engine": "规则"}, {"text": "lihua_teacher@example.com", "type": "邮箱", "start": 65, "end": 90, "engine": "规则"}]}
+{"id": "pii-02", "entities": [{"text": "310106201005061230", "type": "身份证号", "start": 10, "end": 28, "engine": "规则"}, {"text": "上海市静安区南京西路1266号", "type": "地址", "start": 31, "end": 46, "engine": "规则"}, {"text": "静安区第一中学", "type": "学校", "start": 51, "end": 58, "engine": "规则"}]}

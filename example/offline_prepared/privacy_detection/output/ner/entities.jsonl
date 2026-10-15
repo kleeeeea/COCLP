@@ -1,0 +1,2 @@
+{"id": "pii-01", "entities": [{"text": "王小明", "type": "姓名", "start": 0, "end": 3, "engine": "NER"}, {"text": "王小明", "type": "姓名", "start": 8, "end": 11, "engine": "NER"}, {"text": "李华", "type": "姓名", "start": 44, "end": 46, "engine": "NER"}]}
+{"id": "pii-02", "entities": [{"text": "张雨欣", "type": "姓名", "start": 2, "end": 5, "engine": "NER"}, {"text": "上海市静安区", "type": "地名", "start": 31, "end": 37, "engine": "NER"}, {"text": "静安区", "type": "地名", "start": 51, "end": 54, "engine": "NER"}]}

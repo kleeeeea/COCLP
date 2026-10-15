@@ -1,0 +1,75 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  216,
+  308,
+  2928,
+  1324
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "PassThroughDir",
+   "title": "语料输入 (家校沟通记录、学生档案)",
+   "box": [
+    313,
+    934,
+    620,
+    219
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PIIRuleEngine",
+   "title": "隐私检测·规则引擎 (正则 + 校验)",
+   "box": [
+    1078,
+    533,
+    656,
+    219
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PIINerEngine",
+   "title": "隐私检测·NER 模型 (spaCy 中文)",
+   "box": [
+    1078,
+    1189,
+    656,
+    273
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PIIMerge",
+   "title": "隐私检测结果合并 (红字标出隐私信息)",
+   "box": [
+    1881,
+    496,
+    1167,
+    966
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "双引擎并行隐私检测 (规则引擎 + NER 模型)",
+   "box": [
+    240,
+    332,
+    2880,
+    1276
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

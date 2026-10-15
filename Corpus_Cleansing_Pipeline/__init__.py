@@ -24,6 +24,7 @@ from .stat_card_node import CorpusStatCard
 from .audio_waveform_node import AudioWaveform
 from .user_feedback_node import UserFeedbackLogParser, FeedbackToSFT
 from .text_normalizer_node import TextNormalizer
+from .privacy_detection_node import PIIRuleEngine, PIINerEngine, PIIMerge, PassThroughDir
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -60,6 +61,10 @@ NODE_CLASS_MAPPINGS = {
     "UserFeedbackLogParser": UserFeedbackLogParser,
     "FeedbackToSFT": FeedbackToSFT,
     "TextNormalizer": TextNormalizer,
+    "PIIRuleEngine": PIIRuleEngine,
+    "PIINerEngine": PIINerEngine,
+    "PIIMerge": PIIMerge,
+    "PassThroughDir": PassThroughDir,
 
 }
 
@@ -106,6 +111,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "UserFeedbackLogParser": "用户反馈日志解析",
     "FeedbackToSFT": "反馈转 SFT 样本",
     "TextNormalizer": "格式归一化与语言规范化",
+    "PIIRuleEngine": "隐私检测·规则引擎",
+    "PIINerEngine": "隐私检测·NER 模型",
+    "PIIMerge": "隐私检测结果合并",
+    "PassThroughDir": "语料输入",
 }
 
 

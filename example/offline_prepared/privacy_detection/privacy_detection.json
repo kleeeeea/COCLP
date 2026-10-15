@@ -1,0 +1,233 @@
+{
+  "id": "0ff1e5a0-91a0-4b1d-9c3e-5c2e7a1b0d08",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "PassThroughDir",
+      "title": "语料输入 (家校沟通记录、学生档案)",
+      "pos": [
+        0,
+        300
+      ],
+      "size": [
+        340,
+        90
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "语料目录",
+          "type": "STRING",
+          "links": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PassThroughDir"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/privacy_detection/data"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "PIIRuleEngine",
+      "title": "隐私检测·规则引擎 (正则 + 校验)",
+      "pos": [
+        420,
+        80
+      ],
+      "size": [
+        360,
+        90
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_dir",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "规则检测结果",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PIIRuleEngine"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/privacy_detection/output/rule"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "PIINerEngine",
+      "title": "隐私检测·NER 模型 (spaCy 中文)",
+      "pos": [
+        420,
+        440
+      ],
+      "size": [
+        360,
+        120
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_dir",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "NER 检测结果",
+          "type": "STRING",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PIINerEngine"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/privacy_detection/output/ner",
+        "zh_core_web_sm"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "PIIMerge",
+      "title": "隐私检测结果合并 (红字标出隐私信息)",
+      "pos": [
+        860,
+        60
+      ],
+      "size": [
+        640,
+        500
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "corpus_dir",
+          "type": "STRING",
+          "link": 3
+        },
+        {
+          "name": "rule_dir",
+          "type": "STRING",
+          "link": 4
+        },
+        {
+          "name": "ner_dir",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "合并检测结果",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PIIMerge"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/privacy_detection/output/merged"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      1,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      1,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      2,
+      0,
+      4,
+      1,
+      "STRING"
+    ],
+    [
+      5,
+      3,
+      0,
+      4,
+      2,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "双引擎并行隐私检测 (规则引擎 + NER 模型)",
+      "bounding": [
+        -40,
+        -60,
+        1580,
+        700
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}
