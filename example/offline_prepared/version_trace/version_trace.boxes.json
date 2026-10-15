@@ -1,0 +1,75 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  310,
+  308,
+  2740,
+  1636
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "PassThroughDir",
+   "title": "质控后批次 (6.1 剔除 C 档)",
+   "box": [
+    388,
+    399,
+    538,
+    161
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "BatchVersionRegister",
+   "title": "批次版本登记 · 版本台账",
+   "box": [
+    1007,
+    399,
+    1050,
+    686
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "ModelCorpusTrace",
+   "title": "模型-语料双向追溯",
+   "box": [
+    1007,
+    1126,
+    1050,
+    740
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "ComplianceAudit",
+   "title": "隐私合规审计 · 月度审计报告",
+   "box": [
+    2138,
+    399,
+    834,
+    794
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "版本管理、双向追溯与合规审计: 批次版本台账 → 模型语料追溯 → 月度合规审计",
+   "box": [
+    334,
+    332,
+    2692,
+    1588
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

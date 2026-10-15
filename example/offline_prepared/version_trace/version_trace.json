@@ -1,0 +1,223 @@
+{
+  "id": "0ff1e5a0-7e50-4b1d-9c3e-5c2e7a1b0d14",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "PassThroughDir",
+      "title": "质控后批次 (6.1 剔除 C 档)",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        400,
+        90
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "语料目录",
+          "type": "STRING",
+          "links": [
+            1,
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PassThroughDir"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/version_trace/data/batch_v2"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "BatchVersionRegister",
+      "title": "批次版本登记 · 版本台账",
+      "pos": [
+        460,
+        0
+      ],
+      "size": [
+        780,
+        460
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "batch_dir",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "版本台账目录",
+          "type": "STRING",
+          "links": [
+            2,
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BatchVersionRegister"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/version_trace/registry",
+        "质控后入库: 剔除 C 档 2 条"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "ModelCorpusTrace",
+      "title": "模型-语料双向追溯",
+      "pos": [
+        460,
+        540
+      ],
+      "size": [
+        780,
+        520
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "registry_dir",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "追溯结果",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ModelCorpusTrace"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/version_trace/data/训练任务登记.jsonl",
+        "Q06",
+        "静安教育大模型 v1.2"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "ComplianceAudit",
+      "title": "隐私合规审计 · 月度审计报告",
+      "pos": [
+        1300,
+        0
+      ],
+      "size": [
+        620,
+        560
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "registry_dir",
+          "type": "STRING",
+          "link": 3
+        },
+        {
+          "name": "batch_dir",
+          "type": "STRING",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "审计报告目录",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ComplianceAudit"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/version_trace/data/隐私处理日志.jsonl",
+        "../example/offline_prepared/version_trace/output",
+        "2026-10",
+        1.0
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      2,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      1,
+      0,
+      4,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "版本管理、双向追溯与合规审计: 批次版本台账 → 模型语料追溯 → 月度合规审计",
+      "bounding": [
+        -40,
+        -80,
+        2000,
+        1180
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

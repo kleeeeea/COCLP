@@ -27,7 +27,8 @@ const STYLE = `
 .coclp-pii-box .coclp-pass { margin-top: 6px; padding: 6px 8px; border-radius: 4px; background: #dcf5e3; color: #127a3a; }
 `;
 // 4.1 隐私检测合并、4.2 脱敏、6.1 质量评估 / 黄金集质控、3.3 近似去重 都用这个面板显示 ui.html
-const NODE_TYPES = ["PIIMerge", "Desensitizer", "QualityAssess", "GoldenLabelCheck", "SimHashDedup"];
+const NODE_TYPES = ["PIIMerge", "Desensitizer", "QualityAssess", "GoldenLabelCheck", "SimHashDedup",
+                    "BatchVersionRegister", "ModelCorpusTrace", "ComplianceAudit"];
 const PANEL_HEIGHT = 340;
 
 app.registerExtension({
