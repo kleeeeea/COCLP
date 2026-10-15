@@ -18,6 +18,7 @@ from .unzip_node import UNZIP
 from .whisper_novad_node import WhisperNoVADTranscribeNode
 from .preview_dir_node import PreviewOutputDir
 from .compare_diff_node import CompareTextDiff
+from .doc_preview_node import DocFirstPagePreview
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -46,6 +47,7 @@ NODE_CLASS_MAPPINGS = {
     "WhisperNoVADTranscribeNode": WhisperNoVADTranscribeNode,
     "PreviewOutputDir": PreviewOutputDir,
     "CompareTextDiff": CompareTextDiff,
+    "DocFirstPagePreview": DocFirstPagePreview,
 
 }
 
@@ -84,6 +86,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "WhisperNoVADTranscribeNode": "Whisper 批量转写节点 (含VAD+简体)",
     "PreviewOutputDir": "预览输出目录",
     "CompareTextDiff": "清洗前后对比",
+    "DocFirstPagePreview": "文档首页预览",
 }
 
 

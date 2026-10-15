@@ -1,8 +1,8 @@
 {
   "id": "0ff1e5a0-d0c5-4b1d-9c3e-5c2e7a1b0d01",
   "revision": 0,
-  "last_node_id": 17,
-  "last_link_id": 23,
+  "last_node_id": 18,
+  "last_link_id": 24,
   "nodes": [
     {
       "id": 8,
@@ -63,7 +63,16 @@
       "flags": {},
       "order": 1,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "input_base",
+          "type": "STRING",
+          "widget": {
+            "name": "input_base"
+          },
+          "link": 24
+        }
+      ],
       "outputs": [
         {
           "name": "md_path",
@@ -425,6 +434,42 @@
         3,
         2000
       ]
+    },
+    {
+      "id": 18,
+      "type": "DocFirstPagePreview",
+      "title": "原始文档 (首页预览)",
+      "pos": [
+        803.34375,
+        607.540283203125
+      ],
+      "size": [
+        460,
+        900
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "文档目录",
+          "type": "STRING",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DocFirstPagePreview"
+      },
+      "widgets_values": [
+        "../example/test_data",
+        "docx",
+        4,
+        800,
+        "../example/offline_prepared/output/doc_preview_cache"
+      ]
     }
   ],
   "links": [
@@ -499,6 +544,14 @@
       15,
       0,
       "STRING"
+    ],
+    [
+      24,
+      18,
+      0,
+      1,
+      0,
+      "STRING"
     ]
   ],
   "groups": [
@@ -506,9 +559,9 @@
       "id": 1,
       "title": "文档处理流水线",
       "bounding": [
-        1303.34375,
+        783.34375,
         547.540283203125,
-        1504.126953125,
+        2024.126953125,
         1265.9786376953125
       ],
       "color": "#3f789e",

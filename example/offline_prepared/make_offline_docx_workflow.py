@@ -99,6 +99,32 @@ def use_diff_for_clean_preview(workflow, extra_height=100):
         group["bounding"][3] += extra_height
 
 
+def add_doc_first_page_preview(workflow, width=460, height=900, gap=40):
+    """在 "Word 文档转换" 左边加 "文档首页预览" (显示原始 docx 第一页), 输出连到它的 input_base; 分组向左扩"""
+    docx_to_md = find_node(workflow, "DocxToMarkdown")
+    group = next(g for g in workflow["groups"] if g["title"] == GROUP_TITLES["docx_pipeline"])
+    gx, gy = group["bounding"][0], group["bounding"][1]
+    node_x = gx - width - gap
+    group["bounding"][0] = node_x - 20
+    group["bounding"][2] += width + gap + 20
+
+    node_id = workflow["last_node_id"] + 1
+    workflow["last_node_id"] = node_id
+    preview = {
+        "id": node_id, "type": "DocFirstPagePreview", "title": "原始文档 (首页预览)",
+        "pos": [node_x, gy + 60], "size": [width, height], "flags": {}, "order": 0, "mode": 0,
+        "inputs": [], "outputs": [{"name": "文档目录", "type": "STRING", "links": None}],
+        "properties": {"Node name for S&R": "DocFirstPagePreview"},
+        # [input_dir, file_types, max_docs, width_px, cache_dir]
+        "widgets_values": [INPUT_DIR, "docx", 4, 800, f"{OUTPUT_ROOT}/doc_preview_cache"],
+    }
+    workflow["nodes"].append(preview)
+    # input_base 从控件改成连线输入
+    docx_to_md.setdefault("inputs", []).append(
+        {"name": "input_base", "type": "STRING", "widget": {"name": "input_base"}, "link": None})
+    add_link(workflow, preview, 0, docx_to_md, len(docx_to_md["inputs"]) - 1, "STRING")
+
+
 def build_workflow():
     workflow = json.loads(SRC.read_text(encoding="utf-8"))
     workflow["id"] = "0ff1e5a0-d0c5-4b1d-9c3e-5c2e7a1b0d01"  # 和 docx_workflow_test 区分, 可同时打开
@@ -120,6 +146,8 @@ def build_workflow():
             node["title"] = f"执行组: {node['widgets_values'][0]}"
     for group in workflow["groups"]:
         group["title"] = GROUP_TITLES.get(group["title"], group["title"])
+
+    add_doc_first_page_preview(workflow)  # 放在组改名之后, 按中文组名找分组
 
     DST.write_text(json.dumps(workflow, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"写入 {DST}")
