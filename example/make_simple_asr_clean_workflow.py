@@ -20,9 +20,9 @@ SRC = EXAMPLE_DIR / "audio_workflow.json"
 DST = EXAMPLE_DIR / "simple_asr_clean_workflow.json"
 
 # Mac CPU 上 medium 约 2.4x 实时 (8.5 分钟要 ~20 分钟), 先用 small + 1 分钟片段:
-#   ffmpeg -i example/test_data/speak.m4a -t 60 -c copy example/test_out/asr_clip/speak_60s.m4a
+#   ffmpeg -i example/test_data/speak.m4a -t 60 -c copy example/test_data_asr_clip/speak_60s.m4a
 # 要跑完整音频: TEST_INPUT_DIR = "../example/test_data", WHISPER_MODEL = "medium" (和仓库 LFS 里的权重 sha256 一致)
-TEST_INPUT_DIR = "../example/test_out/asr_clip"
+TEST_INPUT_DIR = "../example/test_data_asr_clip"  # 不放在 test_data 里, 免得完整音频流程把片段也转写一遍
 OUTPUT_ROOT = "../example/test_out/simple_asr"
 WHISPER_MODEL = "small"
 DEVICE = "cpu"

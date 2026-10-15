@@ -33,7 +33,7 @@
         "Node name for S&R": "WhisperNoVADTranscribeNode"
       },
       "widgets_values": [
-        "../example/test_out/asr_clip",
+        "../example/test_data_asr_clip",
         "small",
         "../example/test_out/simple_asr/whisper",
         "all_transcripts.jsonl",
