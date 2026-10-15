@@ -26,6 +26,7 @@ from mineru.backend.pipeline.pipeline_middle_json_mkcontent import union_make as
 from mineru.backend.pipeline.model_json_to_middle_json import result_to_middle_json as pipeline_result_to_middle_json
 from mineru.backend.vlm.vlm_middle_json_mkcontent import union_make as vlm_union_make
 from mineru.utils.models_download_utils import auto_download_and_get_model_root_path
+from .llm_utils import is_offline_prepared
 
 
 def do_parse(
@@ -309,6 +310,9 @@ class Mineru_ocr:
     def mineru(self, read_path, out_path, backend, type):
         pdf_files_dir=read_path
         output_dir=out_path
+        if is_offline_prepared(output_dir):  # OCR 结果已离线生成好, 不加载模型直接复用
+            print(f"[离线回放] OCR 结果已预先生成, 跳过解析: {output_dir}")
+            return (output_dir,)
        
        
         logging.basicConfig(

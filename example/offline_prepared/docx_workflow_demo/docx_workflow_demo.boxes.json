@@ -1,0 +1,86 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  551,
+  308,
+  2099,
+  1636
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "DocxToMarkdown",
+   "title": "Word 文档转换",
+   "box": [
+    1430,
+    571,
+    374,
+    155
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "MarkdownInfoNode",
+   "title": "Markdown → JSONL",
+   "box": [
+    1904,
+    519,
+    374,
+    222
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: docx → markdown",
+   "box": [
+    1351,
+    1324,
+    582,
+    540
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "DocFirstPagePreview",
+   "title": "原始文档 (首页预览)",
+   "box": [
+    630,
+    374,
+    637,
+    1289
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: 结构化语料 (JSONL)",
+   "box": [
+    1988,
+    1324,
+    582,
+    540
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "Word 文档采集",
+   "box": [
+    575,
+    332,
+    2051,
+    1588
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

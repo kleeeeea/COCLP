@@ -6,7 +6,8 @@ import re
 API_KEY_ENV_NAMES = ("COCLP_API_KEY", "ECNU_API_KEY")
 
 
-# 输出目录里有这个标记文件 = 结果已离线生成好, 大模型节点直接复用, 不再调 API (用于演示/截图)
+# 输出目录里有这个标记文件 = 结果已离线生成好, 慢节点直接复用, 不再调 API/加载模型 (用于演示/截图)
+# 用到的节点: 文档分类、QA (大模型)、Mineru OCR、Whisper ASR
 OFFLINE_MARKER = ".offline_prepared"
 
 

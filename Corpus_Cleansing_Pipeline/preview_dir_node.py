@@ -57,23 +57,39 @@ def display_path(path):
         return resolved.name
 
 
-def build_dir_preview(dir_path, max_files, max_chars):
+def find_files(root, file_pattern, suffixes):
+    """file_pattern 非空时按通配符递归匹配 (如 *.md), 否则按后缀筛选"""
+    if root.is_file():
+        return [root]
+    if file_pattern:
+        return sorted(p for p in root.rglob(file_pattern) if p.is_file())
+    return sorted(p for p in root.rglob("*") if p.is_file() and p.suffix in suffixes)
+
+
+def build_dir_preview(dir_path, max_files, max_chars, file_pattern=""):
     root = Path(dir_path)
     if not root.exists():
         return f"目录不存在: {display_path(root)}"
-    if root.is_file():
-        files = [root]
-    else:
-        files = sorted(p for p in root.rglob("*") if p.is_file() and p.suffix in TEXT_SUFFIXES)
+    files = find_files(root, file_pattern, TEXT_SUFFIXES)
     if not files:
-        return f"目录里没有 {TEXT_SUFFIXES} 文件: {display_path(root)}"
+        return f"目录里没有 {file_pattern or TEXT_SUFFIXES} 文件: {display_path(root)}"
 
     parts = [f"目录: {display_path(root)}  (共 {len(files)} 个文本文件, 显示前 {min(max_files, len(files))} 个)"]
     for file_path in files[:max_files]:
         size_kb = os.path.getsize(file_path) / 1024
-        parts.append(f"\n===== {file_path.relative_to(root) if root.is_dir() else file_path.name}  ({size_kb:.1f} KB) =====")
+        parts.append(f"\n===== {file_path.name}  ({size_kb:.1f} KB) =====")
         parts.append(read_text_preview(file_path, max_chars))
     return "\n".join(parts)
+
+
+def render_pdf_pages(pdf_path, first_page, num_pages, scale):
+    """把 PDF 若干页渲染成 PIL 图片 (用 pypdfium2, MinerU 已依赖它)"""
+    import pypdfium2 as pdfium
+    pdf = pdfium.PdfDocument(str(pdf_path))
+    last = min(first_page + num_pages, len(pdf))
+    images = [pdf[i].render(scale=scale).to_pil().convert("RGB") for i in range(first_page, last)]
+    pdf.close()
+    return images
 
 
 class PreviewOutputDir:
@@ -87,6 +103,10 @@ class PreviewOutputDir:
                 "max_files": ("INT", {"default": 3, "min": 1, "max": 50}),
                 "max_chars": ("INT", {"default": 2000, "min": 100, "max": 100000, "step": 100}),
             },
+            "optional": {
+                # 只看匹配的文件, 如 MinerU 输出目录里只看 "*.md" (留空 = 所有 jsonl/json/md/txt)
+                "file_pattern": ("STRING", {"default": ""}),
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -95,12 +115,48 @@ class PreviewOutputDir:
     OUTPUT_NODE = True
     CATEGORY = "MY_NODES/Preview"
 
-    def preview(self, dir_path, max_files, max_chars):
-        text = build_dir_preview(dir_path, max_files, max_chars)
+    def preview(self, dir_path, max_files, max_chars, file_pattern=""):
+        text = build_dir_preview(dir_path, max_files, max_chars, file_pattern)
         # ui.text 由 web/preview_dir.js 渲染成节点上的只读文本框
         return {"ui": {"text": [text]}, "result": (text,)}
 
 
+class PreviewPdfPage:
+    """把目录里匹配到的 PDF (如 MinerU 的 *_layout.pdf 版面框标注图) 渲染成图片, 接 "预览图像" 节点显示"""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "dir_path": ("STRING", {"forceInput": True}),
+                "file_pattern": ("STRING", {"default": "*_layout.pdf"}),
+                "file_index": ("INT", {"default": 0, "min": 0, "max": 1000}),
+                "first_page": ("INT", {"default": 0, "min": 0, "max": 10000}),
+                "num_pages": ("INT", {"default": 1, "min": 1, "max": 20}),
+                "scale": ("FLOAT", {"default": 1.5, "min": 0.5, "max": 4.0, "step": 0.1}),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    RETURN_NAMES = ("页面图像",)
+    FUNCTION = "render"
+    CATEGORY = "MY_NODES/Preview"
+
+    def render(self, dir_path, file_pattern, file_index, first_page, num_pages, scale):
+        import numpy as np
+        import torch
+        files = find_files(Path(dir_path), file_pattern, (".pdf",))
+        if not files:
+            raise FileNotFoundError(f"没有匹配 {file_pattern} 的 PDF: {display_path(dir_path)}")
+        pdf_path = files[min(file_index, len(files) - 1)]
+        images = render_pdf_pages(pdf_path, first_page, num_pages, scale)
+        # 同一份 PDF 的页面尺寸一般一致; 不一致时按第一页尺寸缩放, 才能拼成一个 batch
+        size = images[0].size
+        arrays = [np.asarray(img.resize(size)).astype(np.float32) / 255.0 for img in images]
+        return (torch.from_numpy(np.stack(arrays)),)
+
+
 if __name__ == "__main__":
     import sys
-    print(build_dir_preview(sys.argv[1] if len(sys.argv) > 1 else ".", 3, 2000))
+    print(build_dir_preview(sys.argv[1] if len(sys.argv) > 1 else ".", 3, 2000,
+                            sys.argv[2] if len(sys.argv) > 2 else ""))

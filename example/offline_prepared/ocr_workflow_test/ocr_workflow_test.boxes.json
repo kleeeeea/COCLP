@@ -1,0 +1,75 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  210,
+  308,
+  2781,
+  1636
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "Mineru_ocr",
+   "title": "PDF 文档解析 (MinerU OCR)",
+   "box": [
+    307,
+    461,
+    628,
+    351
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: OCR 识别文本",
+   "box": [
+    1046,
+    941,
+    776,
+    905
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewPdfPage",
+   "title": "PDF 页面预览 (版面框标注)",
+   "box": [
+    1046,
+    461,
+    776,
+    425
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewImage",
+   "title": "预览: 版面识别 (第 1 页)",
+   "box": [
+    1932,
+    461,
+    960,
+    1385
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "PDF 文档解析 (OCR)",
+   "box": [
+    234,
+    332,
+    2733,
+    1588
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

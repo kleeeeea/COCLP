@@ -1,0 +1,268 @@
+{
+  "id": "0ff1e5a0-d0c5-4b1d-9c3e-5c2e7a1b0d04",
+  "revision": 0,
+  "last_node_id": 19,
+  "last_link_id": 25,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "DocxToMarkdown",
+      "pos": [
+        1380.51513671875,
+        749.7528076171875
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_base",
+          "type": "STRING",
+          "widget": {
+            "name": "input_base"
+          },
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "md_path",
+          "type": "STRING",
+          "links": [
+            1,
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DocxToMarkdown"
+      },
+      "widgets_values": [
+        "../example/test_data",
+        "../example/offline_prepared/docx_workflow_demo/output/md"
+      ],
+      "title": "Word 文档转换"
+    },
+    {
+      "id": 3,
+      "type": "MarkdownInfoNode",
+      "pos": [
+        1722.8609619140625,
+        712.47900390625
+      ],
+      "size": [
+        270,
+        130
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "md_root",
+          "name": "md_root",
+          "type": "STRING",
+          "widget": {
+            "name": "md_root"
+          },
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "label": "jsonl_path",
+          "name": "jsonl_path",
+          "type": "STRING",
+          "links": [
+            25
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MarkdownInfoNode"
+      },
+      "widgets_values": [
+        "./markdown",
+        "../example/offline_prepared/docx_workflow_demo/output/jsonl",
+        "../example/offline_prepared/docx_workflow_demo/output/jsonl/md_info.jsonl",
+        1
+      ],
+      "title": "Markdown → JSONL"
+    },
+    {
+      "id": 14,
+      "type": "PreviewOutputDir",
+      "title": "预览: docx → markdown",
+      "pos": [
+        1323.34375,
+        1293.5189208984375
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        3,
+        2000
+      ]
+    },
+    {
+      "id": 18,
+      "type": "DocFirstPagePreview",
+      "title": "原始文档 (首页预览)",
+      "pos": [
+        803.34375,
+        607.540283203125
+      ],
+      "size": [
+        460,
+        900
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "文档目录",
+          "type": "STRING",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DocFirstPagePreview"
+      },
+      "widgets_values": [
+        "../example/test_data",
+        "docx",
+        4,
+        800,
+        "../example/offline_prepared/docx_workflow_demo/output/doc_preview_cache"
+      ]
+    },
+    {
+      "id": 19,
+      "type": "PreviewOutputDir",
+      "title": "预览: 结构化语料 (JSONL)",
+      "pos": [
+        1783.34375,
+        1293.5189208984375
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        3,
+        2000
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      18,
+      1,
+      0,
+      14,
+      0,
+      "STRING"
+    ],
+    [
+      24,
+      18,
+      0,
+      1,
+      0,
+      "STRING"
+    ],
+    [
+      25,
+      3,
+      0,
+      19,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Word 文档采集",
+      "bounding": [
+        763.34375,
+        547.540283203125,
+        1480.0,
+        1145.9786376953125
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        -972.3579056628755,
+        -348.0163233695966
+      ]
+    },
+    "frontendVersion": "1.23.4"
+  },
+  "version": 0.4
+}

@@ -1,0 +1,198 @@
+{
+  "id": "a5b0f1c2-3d4e-4f50-8a61-7b8c9d0e1f23",
+  "revision": 0,
+  "last_node_id": 22,
+  "last_link_id": 3,
+  "nodes": [
+    {
+      "id": 20,
+      "type": "AudioWaveform",
+      "title": "音频输入与波形",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        360,
+        110
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "波形图",
+          "type": "IMAGE",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "音频目录",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AudioWaveform"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/asr_workflow_test/input",
+        3
+      ]
+    },
+    {
+      "id": 21,
+      "type": "PreviewImage",
+      "title": "预览: 音频波形",
+      "pos": [
+        0,
+        362
+      ],
+      "size": [
+        770.2710876464844,
+        300
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 11,
+      "type": "WhisperNoVADTranscribeNode",
+      "pos": [
+        440,
+        0
+      ],
+      "size": [
+        330.2710876464844,
+        202
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_dir",
+          "type": "STRING",
+          "widget": {
+            "name": "input_dir"
+          },
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "transcription",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WhisperNoVADTranscribeNode"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/asr_workflow_test/input",
+        "medium",
+        "../example/offline_prepared/asr_workflow_test/output",
+        "all_transcripts.jsonl",
+        "zh",
+        5,
+        "cpu"
+      ],
+      "title": "语音识别转写 (调用平台 ASR)"
+    },
+    {
+      "id": 22,
+      "type": "PreviewOutputDir",
+      "title": "预览: 转写结果",
+      "pos": [
+        850.2710876464844,
+        0
+      ],
+      "size": [
+        640,
+        330
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        3,
+        2000
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      20,
+      0,
+      21,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      20,
+      1,
+      11,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      11,
+      0,
+      22,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        50,
+        50
+      ]
+    }
+  },
+  "version": 0.4
+}

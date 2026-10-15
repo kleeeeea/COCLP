@@ -8,6 +8,7 @@ from opencc import OpenCC
 from pydub import AudioSegment
 import hashlib
 from faster_whisper import WhisperModel
+from .llm_utils import is_offline_prepared
 
 cc = OpenCC('t2s')  # 繁体转简体
 
@@ -46,6 +47,9 @@ class WhisperNoVADTranscribeNode:
             raise RuntimeError(f"Failed to load audio: {e}")
 
     def run(self, input_dir, model_path, output_dir, language, beam_size, device, output_filename):
+        if is_offline_prepared(output_dir):  # 转写结果已离线生成好, 不加载模型直接复用
+            print(f"[离线回放] ASR 结果已预先生成, 跳过转写: {output_dir}")
+            return (output_dir,)
         # CPU (如 Mac, 没有 CUDA) 不支持 float16; 用 int8 + 全部核, 否则 fp32 单线程解码非常慢
         if device == "cuda":
             model = WhisperModel(model_path, device=device, compute_type="float16")

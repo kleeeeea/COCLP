@@ -1,0 +1,65 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  216,
+  308,
+  2928,
+  1385
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "AudioWaveform",
+   "title": "音频输入与波形",
+   "box": [
+    240,
+    332,
+    696,
+    271
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewImage",
+   "title": "预览: 音频波形",
+   "box": [
+    240,
+    1032,
+    1489,
+    638
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "WhisperNoVADTranscribeNode",
+   "title": "语音识别转写 (调用平台 ASR)",
+   "box": [
+    1090,
+    332,
+    638,
+    448
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: 转写结果",
+   "box": [
+    1883,
+    332,
+    1237,
+    754
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

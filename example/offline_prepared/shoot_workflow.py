@@ -44,16 +44,17 @@ async ([workflowPath, runTimeoutMs]) => {
 """
 
 FRAME_JS = """
-([margin, topBar]) => {
+([margin, topBar, leftBar]) => {
+  // leftBar: 左侧边栏宽度 (CSS 像素); 画布铺满整个窗口, 侧边栏盖在上面, 取景要避开
   // 对准所有分组 + 所有节点 (组外的执行器节点也要完整入画)
   const boxes = app.graph._groups.map(g => Array.from(g._bounding))
     .concat(app.graph._nodes.map(n => [n.pos[0], n.pos[1] - 30, n.size[0], n.size[1] + 30]));
   const x0 = Math.min(...boxes.map(b => b[0])), y0 = Math.min(...boxes.map(b => b[1]));
   const x1 = Math.max(...boxes.map(b => b[0] + b[2])), y1 = Math.max(...boxes.map(b => b[1] + b[3]));
   const c = app.canvas, W = c.canvas.width / devicePixelRatio, H = c.canvas.height / devicePixelRatio;
-  const s = Math.min((W - 2 * margin) / (x1 - x0), (H - topBar - 2 * margin) / (y1 - y0));
+  const s = Math.min((W - leftBar - 2 * margin) / (x1 - x0), (H - topBar - 2 * margin) / (y1 - y0));
   c.ds.scale = s;
-  c.ds.offset = [-x0 + ((W - (x1 - x0) * s) / 2) / s, -y0 + (topBar + margin) / s];
+  c.ds.offset = [-x0 + (leftBar + (W - leftBar - (x1 - x0) * s) / 2) / s, -y0 + (topBar + margin) / s];
   c.setDirty(true, true);
   // 返回分组在页面上的矩形 (CSS 像素), 用来另存一张只含分组的裁切图
   const rect = c.canvas.getBoundingClientRect();
@@ -94,7 +95,7 @@ def shoot(workflow, out_png, width=1600, height=1000, scale=2, run_timeout_s=120
         page.wait_for_function("window.app && window.app.graph", timeout=60000)
         page.add_style_tag(content=HIDE_CSS)
         status = page.evaluate(LOAD_AND_RUN_JS, [quote("workflows/" + workflow, safe=""), run_timeout_s * 1000])
-        framed = page.evaluate(FRAME_JS, [40, 110])
+        framed = page.evaluate(FRAME_JS, [40, 110, 80])
         page.wait_for_timeout(1500)  # 等画布和预览文本框重绘
         # 去掉 "任务添加到队列" 之类的通知提示 (类名随前端版本变, 按文本找到所在的浮层再隐藏)
         page.evaluate("""() => {
@@ -131,5 +132,6 @@ if __name__ == "__main__":
     parser.add_argument("--width", type=int, default=1600)
     parser.add_argument("--height", type=int, default=1000)
     parser.add_argument("--scale", type=int, default=2)
+    parser.add_argument("--run-timeout", type=int, default=120, help="等待运行结束的秒数 (首次真实跑 OCR/ASR 要调大)")
     args = parser.parse_args()
-    shoot(args.workflow, args.out, args.width, args.height, args.scale)
+    shoot(args.workflow, args.out, args.width, args.height, args.scale, args.run_timeout)

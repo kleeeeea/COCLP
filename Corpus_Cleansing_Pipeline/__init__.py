@@ -16,11 +16,12 @@ from .text_node import PromptTextEditor
 from .train_label import TrainBertNode, InferenceBertNode
 from .unzip_node import UNZIP
 from .whisper_novad_node import WhisperNoVADTranscribeNode
-from .preview_dir_node import PreviewOutputDir
+from .preview_dir_node import PreviewOutputDir, PreviewPdfPage
 from .compare_diff_node import CompareTextDiff
 from .doc_preview_node import DocFirstPagePreview
 from .five_dim_label_node import FiveDimLabelNode
 from .stat_card_node import CorpusStatCard
+from .audio_waveform_node import AudioWaveform
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -48,10 +49,12 @@ NODE_CLASS_MAPPINGS = {
     "UNZIP": UNZIP,
     "WhisperNoVADTranscribeNode": WhisperNoVADTranscribeNode,
     "PreviewOutputDir": PreviewOutputDir,
+    "PreviewPdfPage": PreviewPdfPage,
     "CompareTextDiff": CompareTextDiff,
     "DocFirstPagePreview": DocFirstPagePreview,
     "FiveDimLabelNode": FiveDimLabelNode,
     "CorpusStatCard": CorpusStatCard,
+    "AudioWaveform": AudioWaveform,
 
 }
 
@@ -89,10 +92,12 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "UNZIP": "压缩包解压",
     "WhisperNoVADTranscribeNode": "Whisper 批量转写节点 (含VAD+简体)",
     "PreviewOutputDir": "预览输出目录",
+    "PreviewPdfPage": "PDF 页面预览",
     "CompareTextDiff": "清洗前后对比",
     "DocFirstPagePreview": "文档首页预览",
     "FiveDimLabelNode": "五维标注与分类",
     "CorpusStatCard": "语料规模看板",
+    "AudioWaveform": "音频波形",
 }
 
 
