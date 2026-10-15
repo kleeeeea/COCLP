@@ -1,9 +1,8 @@
 """6.1 图 2 专家抽样审核 截图: 审核节点阻塞到专家提交, 通用 shoot_workflow.py 等不到 "运行结束", 这里单独驱动:
 
-    1. 运行 -> 等审核单出现 -> 等第一次 "定期提醒" (提醒间隔秒, 默认 60)
-    2. 按专家视角填审核单 -> 截图 expert_review_审核中.png
-         Q06《背影》: 学科 数学→语文, 质量档 B→A, 修改后通过;  Q03 听力: 格式改纯文本, 修改后通过;  A 档抽检: 通过
-    3. 提交 (解除阻塞) -> 等节点汇总 -> 截图 expert_review_审核结果.png
+    1. 运行 -> 等审核单推送到节点 -> 等第一次 "定期提醒" (提醒间隔秒, 默认 60)
+    2. 截图 expert_review.png (审核单待专家填写, 不预填任何专家结论)
+    3. 中断本次运行, 解除阻塞 (不代替专家提交)
 
 用法 (在 COCLP 目录下, ComfyUI 已启动, 已跑过图 1): python example/offline_prepared/quality_control/shoot_expert_review.py
 """
@@ -30,23 +29,6 @@ async (workflowPath) => {
 }
 """
 
-# 节点上的 DOM 面板在无头浏览器里被画布浮层挡住, 直接设值并触发 change 事件
-FILL_JS = """([sid, edits, conclusion, comment]) => {
-  const card = document.querySelector(`.coclp-review .rv-card[data-sid="${sid}"]`);
-  if (!card) return false;
-  for (const [dim, value] of Object.entries(edits)) {
-    const field = card.querySelector(`[data-dim="${dim}"]`);
-    field.value = value;
-    field.dispatchEvent(new Event('change'));
-  }
-  card.querySelectorAll('[data-check]').forEach(c => { c.checked = true; });
-  const radio = card.querySelector(`input[type=radio][value="${conclusion}"]`);
-  radio.checked = true;
-  radio.dispatchEvent(new Event('change'));
-  card.querySelector('.rv-comment').value = comment;
-  return true;
-}"""
-
 HIDE_NOTICES_JS = """() => {
   for (const el of document.querySelectorAll('body *')) {
     if (el.children.length === 0 && /任务添加到队列|作业已完成|Job queued|jobs? completed/i.test(el.textContent)) {
@@ -55,15 +37,6 @@ HIDE_NOTICES_JS = """() => {
     }
   }
 }"""
-
-
-def shoot_both(page, name):
-    framed = page.evaluate(FRAME_JS, [40, 110, 80])
-    page.wait_for_timeout(1200)
-    page.evaluate(HIDE_NOTICES_JS)
-    page.screenshot(path=str(HERE / f"{name}.png"))
-    page.screenshot(path=str(HERE / f"{name}_分组裁切.png"), clip=framed["clip"])
-    print(f"截图 -> {HERE / name}.png")
 
 
 def main():
@@ -78,19 +51,16 @@ def main():
         print("审核单已推送, 等待第一次提醒...")
         page.wait_for_selector(".coclp-review .rv-wait", state="visible", timeout=REMIND_WAIT_MS)
 
-        page.evaluate(FILL_JS, ["Q06", {"学科": "语文", "grade": "A"}, "修改后通过", "学科应为语文, 改正后可入库"])
-        page.evaluate(FILL_JS, ["Q03", {"格式": "纯文本"}, "修改后通过", "无音频原文, 格式改为纯文本"])
-        sids = page.evaluate("() => [...document.querySelectorAll('.coclp-review .rv-card')].map(c => c.dataset.sid)")
-        for sid in sids:
-            if sid not in ("Q03", "Q06"):
-                page.evaluate(FILL_JS, [sid, {}, "通过", ""])  # A 档抽检样本
-        page.evaluate("() => { document.querySelector('.coclp-review .rv-auditor').value = '语文教研组 刘老师'; }")
-        shoot_both(page, "expert_review_审核中")
+        framed = page.evaluate(FRAME_JS, [40, 110, 80])
+        page.wait_for_timeout(1200)
+        page.evaluate(HIDE_NOTICES_JS)
+        page.screenshot(path=str(HERE / "expert_review.png"))
+        page.screenshot(path=str(HERE / "expert_review_分组裁切.png"), clip=framed["clip"])
+        print(f"截图 -> {HERE / 'expert_review.png'}")
 
-        page.evaluate("() => document.querySelector('.coclp-review .rv-submit').click()")
-        page.wait_for_selector(".coclp-review .rv-result", timeout=60000)
-        page.wait_for_timeout(1500)
-        shoot_both(page, "expert_review_审核结果")
+        # 结束阻塞: 中断本次运行, 不代替专家提交审核结论
+        page.evaluate("() => fetch('/interrupt', {method: 'POST'})")
+        page.wait_for_timeout(2000)
         browser.close()
 
 
