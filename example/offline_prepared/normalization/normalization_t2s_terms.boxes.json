@@ -1,0 +1,64 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  597,
+  308,
+  2165,
+  1636
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "TextNormalizer",
+   "title": "语言规范化 (简繁统一 / 术语统一)",
+   "box": [
+    692,
+    420,
+    670,
+    635
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "CompareTextDiff",
+   "title": "清洗前后对比 (高亮差异)",
+   "box": [
+    1468,
+    420,
+    1200,
+    1041
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: 术语词典",
+   "box": [
+    692,
+    1126,
+    741,
+    688
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "语言规范化: 简繁统一、术语统一",
+   "box": [
+    621,
+    332,
+    2117,
+    1588
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

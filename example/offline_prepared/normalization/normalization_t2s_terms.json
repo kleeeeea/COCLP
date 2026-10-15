@@ -1,0 +1,187 @@
+{
+  "id": "0ff1e5a0-a0b1-4b1d-9c3e-5c2e7a1b0d07",
+  "revision": 0,
+  "last_node_id": 3,
+  "last_link_id": 3,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "TextNormalizer",
+      "title": "语言规范化 (简繁统一 / 术语统一)",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        380,
+        330
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "原始语料目录",
+          "type": "STRING",
+          "links": [
+            1,
+            3
+          ]
+        },
+        {
+          "name": "归一化后目录",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextNormalizer"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/normalization/data/t2s_terms",
+        "../example/offline_prepared/normalization/output/t2s_terms",
+        false,
+        false,
+        false,
+        true,
+        true,
+        "../example/offline_prepared/normalization/data/t2s_terms/术语词典.tsv"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CompareTextDiff",
+      "title": "清洗前后对比 (高亮差异)",
+      "pos": [
+        440,
+        0
+      ],
+      "size": [
+        680,
+        560
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "before_dir",
+          "type": "STRING",
+          "link": 1
+        },
+        {
+          "name": "after_dir",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "对比摘要",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CompareTextDiff"
+      },
+      "widgets_values": [
+        4,
+        500
+      ]
+    },
+    {
+      "id": 3,
+      "type": "PreviewOutputDir",
+      "title": "预览: 术语词典",
+      "pos": [
+        0,
+        400
+      ],
+      "size": [
+        380,
+        360
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        1,
+        1000,
+        "*.tsv"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      1,
+      1,
+      2,
+      1,
+      "STRING"
+    ],
+    [
+      3,
+      1,
+      0,
+      3,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "语言规范化: 简繁统一、术语统一",
+      "bounding": [
+        -40,
+        -80,
+        1200,
+        900
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}
