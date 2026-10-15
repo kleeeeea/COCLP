@@ -1,4 +1,5 @@
-// 把 PIIMerge 节点返回的 ui.html (隐私实体高亮) 显示在节点上的 DOM 组件里, 风格与 compare_diff.js 一致
+// 把 PIIMerge (隐私实体高亮) 和 Desensitizer (脱敏前后对比) 返回的 ui.html 显示在节点上的 DOM 组件里,
+// 风格与 compare_diff.js 一致
 import { app } from "../../scripts/app.js";
 
 const STYLE = `
@@ -12,7 +13,10 @@ const STYLE = `
 .coclp-pii-box .coclp-stat { font-weight: 400; margin-left: 8px; opacity: 0.7; }
 .coclp-pii-box mark.coclp-pii { background: #fde2e2; color: #c0262d; font-weight: 600; padding: 0 1px; border-radius: 2px; }
 .coclp-pii-box .coclp-pii-tag { font-size: 9px; color: #c0262d; opacity: 0.75; margin: 0 2px 0 1px; vertical-align: super; }
+.coclp-pii-box del.coclp-del { background: #fde2e2; color: #c0262d; text-decoration: line-through; }
+.coclp-pii-box ins.coclp-ins { background: #dcf5e3; color: #127a3a; text-decoration: none; font-weight: 600; }
 `;
+const NODE_TYPES = ["PIIMerge", "Desensitizer"];
 const PANEL_HEIGHT = 340;
 
 app.registerExtension({
@@ -23,7 +27,7 @@ app.registerExtension({
         document.head.appendChild(style);
     },
     async beforeRegisterNodeDef(nodeType, nodeData) {
-        if (nodeData.name !== "PIIMerge") return;
+        if (!NODE_TYPES.includes(nodeData.name)) return;
 
         const onExecuted = nodeType.prototype.onExecuted;
         nodeType.prototype.onExecuted = function (message) {

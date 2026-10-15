@@ -25,6 +25,7 @@ from .audio_waveform_node import AudioWaveform
 from .user_feedback_node import UserFeedbackLogParser, FeedbackToSFT
 from .text_normalizer_node import TextNormalizer
 from .privacy_detection_node import PIIRuleEngine, PIINerEngine, PIIMerge, PassThroughDir
+from .desensitize_node import Desensitizer
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -65,6 +66,7 @@ NODE_CLASS_MAPPINGS = {
     "PIINerEngine": PIINerEngine,
     "PIIMerge": PIIMerge,
     "PassThroughDir": PassThroughDir,
+    "Desensitizer": Desensitizer,
 
 }
 
@@ -115,6 +117,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PIINerEngine": "隐私检测·NER 模型",
     "PIIMerge": "隐私检测结果合并",
     "PassThroughDir": "语料输入",
+    "Desensitizer": "脱敏处理",
 }
 
 
