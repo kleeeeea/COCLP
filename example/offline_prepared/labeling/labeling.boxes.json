@@ -1,0 +1,86 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  216,
+  308,
+  2928,
+  1541
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "PassThroughDir",
+   "title": "语料输入 (清洗、脱敏后)",
+   "box": [
+    311,
+    421,
+    747,
+    213
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: 待标注语料",
+   "box": [
+    311,
+    705,
+    747,
+    978
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PromptTextEditor",
+   "title": "模型接口地址",
+   "box": [
+    1200,
+    421,
+    711,
+    338
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "FiveDimLabelNode",
+   "title": "五维标注与分类 (ecnu-plus)",
+   "box": [
+    1200,
+    848,
+    711,
+    516
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: 五维标注结果 (学科 / 学段 / 场景 / 难度 / 格式)",
+   "box": [
+    2053,
+    421,
+    996,
+    1262
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "语料标注与分类: 学科、学段、场景、难度、格式 五维标注",
+   "box": [
+    240,
+    332,
+    2880,
+    1493
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

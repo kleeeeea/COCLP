@@ -122,8 +122,8 @@ class HumanSampleAudit:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "input_dir": ("STRING", {"default": "../example/bid_data/audit_demo"}),
-                "output_dir": ("STRING", {"default": "../example/test_out/audit"}),
+                "input_dir": ("STRING", {"default": "../example/offline_prepared/human_audit/data"}),
+                "output_dir": ("STRING", {"default": "../example/offline_prepared/human_audit/output"}),
                 "sample_size": ("INT", {"default": 5, "min": 1, "max": 200}),
                 "seed": ("INT", {"default": 2026, "min": 0, "max": 2**31 - 1}),
                 "pass_threshold": ("FLOAT", {"default": 0.8, "min": 0.0, "max": 1.0, "step": 0.05}),
@@ -138,7 +138,7 @@ class HumanSampleAudit:
     RETURN_NAMES = ("放行目录", "审计报告")
     FUNCTION = "audit"
     OUTPUT_NODE = True
-    CATEGORY = "MY_NODES/Privacy"
+    CATEGORY = "MY_NODES/隐私"
 
     @classmethod
     def IS_CHANGED(cls, **kwargs):

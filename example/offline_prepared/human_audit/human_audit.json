@@ -1,0 +1,127 @@
+{
+  "id": "0ff1e5a0-a0d1-4b1d-9c3e-5c2e7a1b0d10",
+  "revision": 0,
+  "last_node_id": 2,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "HumanSampleAudit",
+      "title": "人工抽样审计 (阻塞等待审核)",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        620,
+        960
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "放行目录",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "审计报告",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HumanSampleAudit"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/human_audit/data",
+        "../example/offline_prepared/human_audit/output",
+        5,
+        2026,
+        "fixed",
+        0.95,
+        60,
+        0,
+        300
+      ]
+    },
+    {
+      "id": 2,
+      "type": "PreviewOutputDir",
+      "title": "语料入库 (审核通过后才执行)",
+      "pos": [
+        700,
+        0
+      ],
+      "size": [
+        440,
+        360
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        1,
+        600,
+        "*.jsonl"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "人工抽样审计: 阻塞等待审核 → 定期提醒 → 达标放行 / 不达标拦截退回",
+      "bounding": [
+        -40,
+        -80,
+        1220,
+        1100
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

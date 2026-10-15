@@ -26,6 +26,7 @@ from .user_feedback_node import UserFeedbackLogParser, FeedbackToSFT
 from .text_normalizer_node import TextNormalizer
 from .privacy_detection_node import PIIRuleEngine, PIINerEngine, PIIMerge, PassThroughDir
 from .desensitize_node import Desensitizer
+from .human_audit_node import HumanSampleAudit
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -67,6 +68,7 @@ NODE_CLASS_MAPPINGS = {
     "PIIMerge": PIIMerge,
     "PassThroughDir": PassThroughDir,
     "Desensitizer": Desensitizer,
+    "HumanSampleAudit": HumanSampleAudit,
 
 }
 
@@ -118,6 +120,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PIIMerge": "隐私检测结果合并",
     "PassThroughDir": "语料输入",
     "Desensitizer": "脱敏处理",
+    "HumanSampleAudit": "人工抽样审计 (阻塞等待审核)",
 }
 
 
