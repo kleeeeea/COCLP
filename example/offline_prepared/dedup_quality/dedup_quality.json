@@ -1,0 +1,211 @@
+{
+  "id": "0ff1e5a0-dd01-4b1d-9c3e-5c2e7a1b0d14",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 3,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "PassThroughDir",
+      "title": "语料输入 (清洗后)",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        400,
+        90
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "语料目录",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PassThroughDir"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/dedup_quality/data"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "PromptTextEditor",
+      "title": "模型接口地址 (ecnu-plus)",
+      "pos": [
+        0,
+        180
+      ],
+      "size": [
+        400,
+        160
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "append_text",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PromptTextEditor"
+      },
+      "widgets_values": [
+        "https://chat.ecnu.edu.cn/open/api/v1"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "QualityAssess",
+      "title": "质量评分 (沿用 6.1 质量评估算法)",
+      "pos": [
+        480,
+        0
+      ],
+      "size": [
+        720,
+        760
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "batch_dir",
+          "type": "STRING",
+          "link": 1
+        },
+        {
+          "name": "api_url",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "评估结果目录",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "QualityAssess"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/dedup_quality/output/quality",
+        "None",
+        "ecnu-plus",
+        0.8,
+        0.6,
+        0.4,
+        false
+      ]
+    },
+    {
+      "id": 4,
+      "type": "SimHashDedup",
+      "title": "近似去重与达标筛选 (SimHash)",
+      "pos": [
+        1260,
+        0
+      ],
+      "size": [
+        620,
+        760
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "scored_dir",
+          "type": "STRING",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "保留语料目录",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SimHashDedup"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/dedup_quality/output/dedup",
+        12,
+        "B"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      1,
+      "STRING"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "去重与质量评分筛选: 质量评分 → SimHash 近似去重 → 簇内优选 → 达标筛选",
+      "bounding": [
+        -40,
+        -80,
+        1960,
+        880
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

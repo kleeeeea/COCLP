@@ -1,0 +1,75 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  216,
+  308,
+  2928,
+  1341
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "PassThroughDir",
+   "title": "语料输入 (清洗后)",
+   "box": [
+    299,
+    405,
+    588,
+    176
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PromptTextEditor",
+   "title": "模型接口地址 (ecnu-plus)",
+   "box": [
+    299,
+    670,
+    588,
+    279
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "QualityAssess",
+   "title": "质量评分 (沿用 6.1 质量评估算法)",
+   "box": [
+    1004,
+    405,
+    1058,
+    1161
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "SimHashDedup",
+   "title": "近似去重与达标筛选 (SimHash)",
+   "box": [
+    2150,
+    405,
+    911,
+    1161
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "去重与质量评分筛选: 质量评分 → SimHash 近似去重 → 簇内优选 → 达标筛选",
+   "box": [
+    240,
+    332,
+    2880,
+    1293
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

@@ -103,24 +103,33 @@ def cached_llm(cache_path, records, offline, compute):
     return cache
 
 
-def grade_record(rule, judge, a_line, b_line, judge_weight):
-    rule_avg = sum(rule.values()) / len(rule)
-    judge_avg = sum((judge[d] - 1) / 4 for d in JUDGE_DIMS) / len(JUDGE_DIMS)
+def used_dims(with_labels):
+    """还没做五维标注的语料 (如 3.3 清洗阶段) 不计 标注完备性 / 标注一致性"""
+    if with_labels:
+        return RULE_DIMS, JUDGE_DIMS
+    return tuple(d for d in RULE_DIMS if d != "标注完备性"), tuple(d for d in JUDGE_DIMS if d != "标注一致性")
+
+
+def grade_record(rule, judge, a_line, b_line, judge_weight, with_labels=True):
+    rule_dims, judge_dims = used_dims(with_labels)
+    rule_avg = sum(rule[d] for d in rule_dims) / len(rule_dims)
+    judge_avg = sum((judge[d] - 1) / 4 for d in judge_dims) / len(judge_dims)
     total = round((1 - judge_weight) * rule_avg + judge_weight * judge_avg, 3)
     grade = "A" if total >= a_line else "B" if total >= b_line else "C"
-    reasons = [f"{d}偏低 ({v:.2f})" for d, v in rule.items() if v < 0.6 and d != "合规性"]
+    reasons = [f"{d}偏低 ({rule[d]:.2f})" for d in rule_dims if rule[d] < 0.6 and d != "合规性"]
     if rule["合规性"] < 1:
         grade, reasons = "C", reasons + ["隐私残留, 退回脱敏"]
-    low = [f"评审·{d} {judge[d]} 分" for d in JUDGE_DIMS if judge[d] <= 2]
+    low = [f"评审·{d} {judge[d]} 分" for d in judge_dims if judge[d] <= 2]
     if low and grade == "A":
         grade = "B"
     return total, grade, reasons + low
 
 
-def quality_html(rows, a_line, b_line, judge_weight):
+def quality_html(rows, a_line, b_line, judge_weight, with_labels=True):
+    rule_dims, judge_dims = used_dims(with_labels)
     counts = Counter(r["质量档"] for r in rows)
-    dim_avg = {d: sum(r["规则分"][d] for r in rows) / len(rows) for d in RULE_DIMS}
-    judge_avg = {d: sum(r["模型评审"][d] for r in rows) / len(rows) for d in JUDGE_DIMS}
+    dim_avg = {d: sum(r["规则分"][d] for r in rows) / len(rows) for d in rule_dims}
+    judge_avg = {d: sum(r["模型评审"][d] for r in rows) / len(rows) for d in judge_dims}
     head = (f'<div class="coclp-summary">批次 {len(rows)} 条: '
             f'<span class="q-a">A 档 {counts["A"]}</span> <span class="q-b">B 档 {counts["B"]}</span> '
             f'<span class="q-c">C 档 {counts["C"]}</span> · 直接入库率 {counts["A"] / len(rows):.0%}<br>'
@@ -147,6 +156,9 @@ class QualityAssess:
             "A档线": ("FLOAT", {"default": 0.8, "min": 0.0, "max": 1.0, "step": 0.05}),
             "B档线": ("FLOAT", {"default": 0.6, "min": 0.0, "max": 1.0, "step": 0.05}),
             "模型评审权重": ("FLOAT", {"default": 0.4, "min": 0.0, "max": 1.0, "step": 0.05}),
+        }, "optional": {
+            # 3.3 清洗阶段还没做五维标注时关掉: 不计 标注完备性 / 标注一致性
+            "计入标注指标": ("BOOLEAN", {"default": True}),
         }}
 
     RETURN_TYPES = ("STRING",)
@@ -155,7 +167,7 @@ class QualityAssess:
     OUTPUT_NODE = True
     CATEGORY = "MY_NODES/质量"
 
-    def run(self, batch_dir, output_dir, api_key, api_url, model_name, A档线, B档线, 模型评审权重):
+    def run(self, batch_dir, output_dir, api_key, api_url, model_name, A档线, B档线, 模型评审权重, 计入标注指标=True):
         records, out = read_jsonl(batch_dir), Path(output_dir)
         offline = is_offline_prepared(output_dir)
         client = None if offline else make_client(api_key, api_url)
@@ -166,10 +178,11 @@ class QualityAssess:
         for rec in records:
             rule = rule_scores(rec, vocab)
             judge = judges.get(rec["id"], {**{d: 3 for d in JUDGE_DIMS}, "理由": "无缓存"})
-            total, grade, reasons = grade_record(rule, judge, A档线, B档线, 模型评审权重)
+            total, grade, reasons = grade_record(rule, judge, A档线, B档线, 模型评审权重, 计入标注指标)
             rows.append({**rec, "规则分": rule, "模型评审": judge, "总分": total, "质量档": grade, "原因": reasons})
         write_jsonl(out / "scored.jsonl", rows)
-        return {"ui": {"html": [quality_html(rows, A档线, B档线, 模型评审权重)]}, "result": (output_dir,)}
+        html_report = quality_html(rows, A档线, B档线, 模型评审权重, 计入标注指标)
+        return {"ui": {"html": [html_report]}, "result": (output_dir,)}
 
 
 # ---------- 黄金集质控 (五维标注) ----------

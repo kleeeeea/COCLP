@@ -28,6 +28,7 @@ from .privacy_detection_node import PIIRuleEngine, PIINerEngine, PIIMerge, PassT
 from .desensitize_node import Desensitizer
 from .human_audit_node import HumanSampleAudit
 from .quality_control_node import QualityAssess, GoldenLabelCheck, ExpertSampleReview
+from .dedup_node import SimHashDedup
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -73,6 +74,7 @@ NODE_CLASS_MAPPINGS = {
     "QualityAssess": QualityAssess,
     "GoldenLabelCheck": GoldenLabelCheck,
     "ExpertSampleReview": ExpertSampleReview,
+    "SimHashDedup": SimHashDedup,
 
 }
 
@@ -128,6 +130,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "QualityAssess": "质量评估 (规则 + 模型评审)",
     "GoldenLabelCheck": "黄金集质控 (五维标注)",
     "ExpertSampleReview": "专家抽样审核 (阻塞等待审核)",
+    "SimHashDedup": "近似去重与达标筛选 (SimHash)",
 }
 
 
