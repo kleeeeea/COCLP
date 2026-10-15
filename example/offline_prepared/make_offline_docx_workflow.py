@@ -1,7 +1,7 @@
 """生成 "离线预先生成结果" 版的 docx 工作流 offline_prepared/docx_workflow_test.json, 用于标书截图.
 
-流程 (example/docx_workflow_test.json 去掉 QA 组):
-    Word 文档转换 -> Markdown→JSONL -> 多功能文本清洗 -> 文档批量分类 (ecnu-plus)
+流程 (example/docx_workflow_test.json 去掉 QA 组, 分类换成五维标注):
+    Word 文档转换 -> Markdown→JSONL -> 多功能文本清洗 -> 五维标注与分类 (ecnu-plus)
 所有输出写到 offline_prepared/output/. 分类这一步离线跑一次后, 在输出目录放 .offline_prepared 标记,
 之后再点 "运行" 就直接复用已有结果 (见 Corpus_Cleansing_Pipeline/llm_utils.py 的 is_offline_prepared), 一两秒出全部预览.
 
@@ -33,7 +33,7 @@ NODE_TITLES = {
     "DocxToMarkdown": "Word 文档转换",
     "MarkdownInfoNode": "Markdown → JSONL",
     "MultiPruner": "多功能文本清洗器",
-    "BatchProcessDocuments_Zho": "文档批量分类 (ecnu-plus)",
+    "FiveDimLabelNode": "五维标注与分类 (ecnu-plus)",
     "PromptTextEditor": "模型接口地址",
     "GroupExecutorSender": "流水线执行器",
 }
@@ -125,6 +125,35 @@ def add_doc_first_page_preview(workflow, width=460, height=900, gap=40):
     add_link(workflow, preview, 0, docx_to_md, len(docx_to_md["inputs"]) - 1, "STRING")
 
 
+INPUT_LABELS = {  # 节点上显示的中文参数名 (只改显示, 不改参数本身)
+    "CompareTextDiff": {"before_dir": "清洗前语料", "after_dir": "清洗后语料",
+                        "max_records": "最多显示条数", "context_chars": "上下文字数"},
+}
+
+
+def apply_input_labels(workflow, labels=INPUT_LABELS):
+    """给输入/控件设中文显示名: 已有的输入口直接加 label, 没连线的控件补一个带 label 的输入项"""
+    for node in workflow["nodes"]:
+        node_labels = labels.get(node["type"], {})
+        inputs = node.setdefault("inputs", [])
+        for name, label in node_labels.items():
+            slot = next((i for i in inputs if i["name"] == name), None)
+            if slot is None:
+                slot = {"name": name, "type": "INT", "widget": {"name": name}, "link": None}
+                inputs.append(slot)
+            slot["label"] = label
+
+
+def use_five_dim_labeler(workflow):
+    """把旧的 "文档批量分类" (按路径猜年级/学年) 换成 "五维标注与分类" (招标第 5 条: 学科/学段/场景/难度/格式).
+    两者输入口一样 (input_folder、api_url 连线), 原地替换节点类型和控件值, 连线不用动"""
+    node = find_node(workflow, "BatchProcessDocuments_Zho")
+    node["type"] = "FiveDimLabelNode"
+    node["properties"] = {"Node name for S&R": "FiveDimLabelNode"}
+    # [input_folder, output_folder, api_key, api_url, model_name, source_dir, max_workers]
+    node["widgets_values"] = ["", f"{OUTPUT_ROOT}/label", "None", "", "ecnu-plus", INPUT_DIR, 2]
+
+
 def build_workflow():
     workflow = json.loads(SRC.read_text(encoding="utf-8"))
     workflow["id"] = "0ff1e5a0-d0c5-4b1d-9c3e-5c2e7a1b0d01"  # 和 docx_workflow_test 区分, 可同时打开
@@ -135,7 +164,7 @@ def build_workflow():
     md_to_jsonl = find_node(workflow, "MarkdownInfoNode")
     md_to_jsonl["widgets_values"][1:3] = [f"{OUTPUT_ROOT}/jsonl", f"{OUTPUT_ROOT}/jsonl/md_info.jsonl"]
     find_node(workflow, "MultiPruner")["widgets_values"][1] = f"{OUTPUT_ROOT}/clean"
-    find_node(workflow, "BatchProcessDocuments_Zho")["widgets_values"][1] = f"{OUTPUT_ROOT}/label"
+    use_five_dim_labeler(workflow)
 
     for node in workflow["nodes"]:
         if node["type"] in NODE_TITLES:
@@ -148,6 +177,7 @@ def build_workflow():
         group["title"] = GROUP_TITLES.get(group["title"], group["title"])
 
     add_doc_first_page_preview(workflow)  # 放在组改名之后, 按中文组名找分组
+    apply_input_labels(workflow)
 
     DST.write_text(json.dumps(workflow, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"写入 {DST}")

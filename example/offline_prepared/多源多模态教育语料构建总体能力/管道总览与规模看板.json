@@ -1,0 +1,822 @@
+{
+  "id": "1a0c7e2e-5b3f-4d6a-9e81-0e5f3c2d1b01",
+  "revision": 0,
+  "last_node_id": 22,
+  "last_link_id": 28,
+  "nodes": [
+    {
+      "id": 8,
+      "type": "GroupExecutorSingle",
+      "pos": [
+        1747.691650390625,
+        272.99517822265625
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "signal",
+          "name": "signal",
+          "shape": 7,
+          "type": "SIGNAL",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "SIGNAL",
+          "name": "SIGNAL",
+          "type": "SIGNAL",
+          "links": [
+            22
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GroupExecutorSingle",
+        "aux_id": "LAOGOU-666/Comfyui-LG_GroupExecutor",
+        "ver": "be6e4b127f3a668881a1be3b353bb272ccd033eb"
+      },
+      "widgets_values": [
+        "文档处理流水线",
+        1,
+        1
+      ],
+      "title": "执行组: 文档处理流水线"
+    },
+    {
+      "id": 1,
+      "type": "DocxToMarkdown",
+      "pos": [
+        1380.51513671875,
+        749.7528076171875
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_base",
+          "type": "STRING",
+          "widget": {
+            "name": "input_base"
+          },
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "md_path",
+          "type": "STRING",
+          "links": [
+            1,
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DocxToMarkdown"
+      },
+      "widgets_values": [
+        "../example/test_data",
+        "../example/offline_prepared/output/md"
+      ],
+      "title": "Word 文档转换"
+    },
+    {
+      "id": 3,
+      "type": "MarkdownInfoNode",
+      "pos": [
+        1722.8609619140625,
+        712.47900390625
+      ],
+      "size": [
+        270,
+        130
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "md_root",
+          "name": "md_root",
+          "type": "STRING",
+          "widget": {
+            "name": "md_root"
+          },
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "label": "jsonl_path",
+          "name": "jsonl_path",
+          "type": "STRING",
+          "links": [
+            2,
+            23
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MarkdownInfoNode"
+      },
+      "widgets_values": [
+        "./markdown",
+        "../example/offline_prepared/output/jsonl",
+        "../example/offline_prepared/output/jsonl/md_info.jsonl",
+        1
+      ],
+      "title": "Markdown → JSONL"
+    },
+    {
+      "id": 4,
+      "type": "MultiPruner",
+      "pos": [
+        2044.496337890625,
+        691.478759765625
+      ],
+      "size": [
+        310.765625,
+        418
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "input_dir",
+          "name": "input_dir",
+          "type": "STRING",
+          "widget": {
+            "name": "input_dir"
+          },
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "label": "输出目录路径",
+          "name": "输出目录路径",
+          "type": "STRING",
+          "links": [
+            11,
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MultiPruner"
+      },
+      "widgets_values": [
+        "./input",
+        "../example/offline_prepared/output/clean",
+        1,
+        100,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "title": "多功能文本清洗器"
+    },
+    {
+      "id": 11,
+      "type": "FiveDimLabelNode",
+      "pos": [
+        2419.691162109375,
+        644.6829833984375
+      ],
+      "size": [
+        315.3755798339844,
+        226
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "input_folder",
+          "name": "input_folder",
+          "type": "STRING",
+          "widget": {
+            "name": "input_folder"
+          },
+          "link": 11
+        },
+        {
+          "name": "api_url",
+          "type": "STRING",
+          "widget": {
+            "name": "api_url"
+          },
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "label": "out_path",
+          "name": "out_path",
+          "type": "STRING",
+          "links": [
+            20,
+            25,
+            26,
+            27
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FiveDimLabelNode"
+      },
+      "widgets_values": [
+        "",
+        "../example/offline_prepared/output/label",
+        "None",
+        "",
+        "ecnu-plus",
+        "../example/test_data",
+        2
+      ],
+      "title": "五维标注与分类 (ecnu-plus)"
+    },
+    {
+      "id": 13,
+      "type": "GroupExecutorSender",
+      "pos": [
+        2499.0244140625,
+        308.349609375
+      ],
+      "size": [
+        400,
+        100
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "signal",
+          "type": "SIGNAL",
+          "link": 28
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "isExecuting": false,
+        "isCancelling": false,
+        "statusText": "",
+        "showStatus": false
+      },
+      "widgets_values": [],
+      "title": "流水线执行器"
+    },
+    {
+      "id": 6,
+      "type": "PromptTextEditor",
+      "pos": [
+        1531.9803466796875,
+        934.269775390625
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "append_text",
+          "type": "STRING",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PromptTextEditor"
+      },
+      "widgets_values": [
+        "https://chat.ecnu.edu.cn/open/api/v1"
+      ],
+      "title": "模型接口地址"
+    },
+    {
+      "id": 14,
+      "type": "PreviewOutputDir",
+      "title": "预览: docx → markdown",
+      "pos": [
+        1323.34375,
+        1293.5189208984375
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        3,
+        2000
+      ]
+    },
+    {
+      "id": 15,
+      "type": "CompareTextDiff",
+      "title": "清洗前后对比 (高亮差异)",
+      "pos": [
+        1763.34375,
+        1293.5189208984375
+      ],
+      "size": [
+        420,
+        460
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "before_dir",
+          "type": "STRING",
+          "link": 23,
+          "label": "清洗前语料"
+        },
+        {
+          "name": "after_dir",
+          "type": "STRING",
+          "link": 19,
+          "label": "清洗后语料"
+        },
+        {
+          "name": "max_records",
+          "type": "INT",
+          "widget": {
+            "name": "max_records"
+          },
+          "link": null,
+          "label": "最多显示条数"
+        },
+        {
+          "name": "context_chars",
+          "type": "INT",
+          "widget": {
+            "name": "context_chars"
+          },
+          "link": null,
+          "label": "上下文字数"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "对比摘要",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CompareTextDiff"
+      },
+      "widgets_values": [
+        3,
+        40
+      ]
+    },
+    {
+      "id": 16,
+      "type": "PreviewOutputDir",
+      "title": "预览: 分类结果",
+      "pos": [
+        2203.34375,
+        1293.5189208984375
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "dir_path",
+          "type": "STRING",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preview_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewOutputDir"
+      },
+      "widgets_values": [
+        3,
+        2000
+      ]
+    },
+    {
+      "id": 18,
+      "type": "DocFirstPagePreview",
+      "title": "原始文档 (首页预览)",
+      "pos": [
+        803.34375,
+        607.540283203125
+      ],
+      "size": [
+        460,
+        900
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "文档目录",
+          "type": "STRING",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DocFirstPagePreview"
+      },
+      "widgets_values": [
+        "../example/test_data",
+        "docx",
+        4,
+        800,
+        "../example/offline_prepared/output/doc_preview_cache"
+      ]
+    },
+    {
+      "id": 19,
+      "type": "CorpusStatCard",
+      "title": "规模看板: 文档数",
+      "pos": [
+        2887.470703125,
+        607.540283203125
+      ],
+      "size": [
+        480,
+        320
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "corpus_dir",
+          "type": "STRING",
+          "widget": {
+            "name": "corpus_dir"
+          },
+          "link": 25,
+          "label": "语料目录"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "指标",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CorpusStatCard"
+      },
+      "widgets_values": [
+        "",
+        "文档数",
+        "/data/corpus/production/edu_multimodal_corpus/document_stats.json"
+      ]
+    },
+    {
+      "id": 20,
+      "type": "CorpusStatCard",
+      "title": "规模看板: Token 数",
+      "pos": [
+        2887.470703125,
+        957.540283203125
+      ],
+      "size": [
+        480,
+        320
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "corpus_dir",
+          "type": "STRING",
+          "widget": {
+            "name": "corpus_dir"
+          },
+          "link": 26,
+          "label": "语料目录"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "指标",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CorpusStatCard"
+      },
+      "widgets_values": [
+        "",
+        "Token 数",
+        "/data/corpus/production/edu_multimodal_corpus/token_stats.json"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "CorpusStatCard",
+      "title": "规模看板: 学段分布",
+      "pos": [
+        2887.470703125,
+        1307.540283203125
+      ],
+      "size": [
+        480,
+        500
+      ],
+      "flags": {},
+      "order": 99,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "corpus_dir",
+          "type": "STRING",
+          "widget": {
+            "name": "corpus_dir"
+          },
+          "link": 27,
+          "label": "语料目录"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "指标",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CorpusStatCard"
+      },
+      "widgets_values": [
+        "",
+        "学段分布",
+        "/data/corpus/production/edu_multimodal_corpus/stage_distribution.json"
+      ]
+    },
+    {
+      "id": 22,
+      "type": "GroupExecutorSingle",
+      "pos": [
+        2087.691650390625,
+        272.99517822265625
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "signal",
+          "name": "signal",
+          "shape": 7,
+          "type": "SIGNAL",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "label": "SIGNAL",
+          "name": "SIGNAL",
+          "type": "SIGNAL",
+          "links": [
+            28
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GroupExecutorSingle",
+        "aux_id": "LAOGOU-666/Comfyui-LG_GroupExecutor",
+        "ver": "be6e4b127f3a668881a1be3b353bb272ccd033eb"
+      },
+      "widgets_values": [
+        "语料规模看板",
+        1,
+        1
+      ],
+      "title": "执行组: 语料规模看板"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      11,
+      4,
+      0,
+      11,
+      0,
+      "STRING"
+    ],
+    [
+      12,
+      6,
+      0,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      18,
+      1,
+      0,
+      14,
+      0,
+      "STRING"
+    ],
+    [
+      19,
+      4,
+      0,
+      15,
+      1,
+      "STRING"
+    ],
+    [
+      20,
+      11,
+      0,
+      16,
+      0,
+      "STRING"
+    ],
+    [
+      22,
+      8,
+      0,
+      22,
+      0,
+      "SIGNAL"
+    ],
+    [
+      23,
+      3,
+      0,
+      15,
+      0,
+      "STRING"
+    ],
+    [
+      24,
+      18,
+      0,
+      1,
+      0,
+      "STRING"
+    ],
+    [
+      25,
+      11,
+      0,
+      19,
+      0,
+      "STRING"
+    ],
+    [
+      26,
+      11,
+      0,
+      20,
+      0,
+      "STRING"
+    ],
+    [
+      27,
+      11,
+      0,
+      21,
+      0,
+      "STRING"
+    ],
+    [
+      28,
+      22,
+      0,
+      13,
+      0,
+      "SIGNAL"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "文档处理流水线",
+      "bounding": [
+        783.34375,
+        547.540283203125,
+        2024.126953125,
+        1265.9786376953125
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "语料规模看板",
+      "bounding": [
+        2867.470703125,
+        547.540283203125,
+        520,
+        1290
+      ],
+      "color": "#b06694",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        -972.3579056628755,
+        -348.0163233695966
+      ]
+    },
+    "frontendVersion": "1.23.4"
+  },
+  "version": 0.4
+}

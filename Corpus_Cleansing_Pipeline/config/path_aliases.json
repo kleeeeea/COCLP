@@ -1,0 +1,4 @@
+{
+  "_说明": "路径别名: 节点读文件时, 若路径以左边的前缀开头且本机不存在, 换成右边的本地目录 (相对 COCLP 根目录). 部署到真有这些目录的服务器上时删掉对应条目即可",
+  "/data/corpus/production/edu_multimodal_corpus": "example/offline_prepared/多源多模态教育语料构建总体能力/edu_multimodal_corpus"
+}

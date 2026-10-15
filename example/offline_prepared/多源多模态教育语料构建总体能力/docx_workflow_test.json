@@ -200,7 +200,7 @@
     },
     {
       "id": 11,
-      "type": "BatchProcessDocuments_Zho",
+      "type": "FiveDimLabelNode",
       "pos": [
         2419.691162109375,
         644.6829833984375
@@ -242,7 +242,7 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "BatchProcessDocuments_Zho"
+        "Node name for S&R": "FiveDimLabelNode"
       },
       "widgets_values": [
         "",
@@ -250,11 +250,10 @@
         "None",
         "",
         "ecnu-plus",
-        "./custom_nodes/Corpus_Cleansing_Pipeline/config",
-        2,
-        true
+        "../example/test_data",
+        2
       ],
-      "title": "文档批量分类 (ecnu-plus)"
+      "title": "五维标注与分类 (ecnu-plus)"
     },
     {
       "id": 13,
@@ -375,12 +374,32 @@
         {
           "name": "before_dir",
           "type": "STRING",
-          "link": 23
+          "link": 23,
+          "label": "清洗前语料"
         },
         {
           "name": "after_dir",
           "type": "STRING",
-          "link": 19
+          "link": 19,
+          "label": "清洗后语料"
+        },
+        {
+          "name": "max_records",
+          "type": "INT",
+          "widget": {
+            "name": "max_records"
+          },
+          "link": null,
+          "label": "最多显示条数"
+        },
+        {
+          "name": "context_chars",
+          "type": "INT",
+          "widget": {
+            "name": "context_chars"
+          },
+          "link": null,
+          "label": "上下文字数"
         }
       ],
       "outputs": [

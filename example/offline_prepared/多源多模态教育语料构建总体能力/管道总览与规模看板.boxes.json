@@ -1,0 +1,206 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  279,
+  308,
+  2641,
+  1636
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "GroupExecutorSingle",
+   "title": "执行组: 文档处理流水线",
+   "box": [
+    1264,
+    332,
+    269,
+    135
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "DocxToMarkdown",
+   "title": "Word 文档转换",
+   "box": [
+    898,
+    807,
+    269,
+    112
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "MarkdownInfoNode",
+   "title": "Markdown → JSONL",
+   "box": [
+    1239,
+    770,
+    269,
+    159
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "MultiPruner",
+   "title": "多功能文本清洗器",
+   "box": [
+    1559,
+    749,
+    309,
+    446
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "FiveDimLabelNode",
+   "title": "五维标注与分类 (ecnu-plus)",
+   "box": [
+    1933,
+    702,
+    314,
+    255
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "GroupExecutorSender",
+   "title": "流水线执行器",
+   "box": [
+    2012,
+    367,
+    398,
+    129
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PromptTextEditor",
+   "title": "模型接口地址",
+   "box": [
+    1049,
+    991,
+    398,
+    229
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: docx → markdown",
+   "box": [
+    841,
+    1348,
+    418,
+    388
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "CompareTextDiff",
+   "title": "清洗前后对比 (高亮差异)",
+   "box": [
+    1279,
+    1348,
+    418,
+    488
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PreviewOutputDir",
+   "title": "预览: 分类结果",
+   "box": [
+    1717,
+    1348,
+    418,
+    388
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "DocFirstPagePreview",
+   "title": "原始文档 (首页预览)",
+   "box": [
+    323,
+    665,
+    458,
+    926
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "CorpusStatCard",
+   "title": "规模看板: 文档数",
+   "box": [
+    2399,
+    665,
+    478,
+    349
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "CorpusStatCard",
+   "title": "规模看板: Token 数",
+   "box": [
+    2399,
+    1014,
+    478,
+    349
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "CorpusStatCard",
+   "title": "规模看板: 学段分布",
+   "box": [
+    2399,
+    1362,
+    478,
+    528
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "GroupExecutorSingle",
+   "title": "执行组: 语料规模看板",
+   "box": [
+    1602,
+    332,
+    269,
+    135
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "文档处理流水线",
+   "box": [
+    303,
+    635,
+    2016,
+    1261
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "语料规模看板",
+   "box": [
+    2379,
+    635,
+    518,
+    1285
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

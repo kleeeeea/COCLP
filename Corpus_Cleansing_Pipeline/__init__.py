@@ -19,6 +19,8 @@ from .whisper_novad_node import WhisperNoVADTranscribeNode
 from .preview_dir_node import PreviewOutputDir
 from .compare_diff_node import CompareTextDiff
 from .doc_preview_node import DocFirstPagePreview
+from .five_dim_label_node import FiveDimLabelNode
+from .stat_card_node import CorpusStatCard
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
 WEB_DIRECTORY = "./web"
@@ -48,6 +50,8 @@ NODE_CLASS_MAPPINGS = {
     "PreviewOutputDir": PreviewOutputDir,
     "CompareTextDiff": CompareTextDiff,
     "DocFirstPagePreview": DocFirstPagePreview,
+    "FiveDimLabelNode": FiveDimLabelNode,
+    "CorpusStatCard": CorpusStatCard,
 
 }
 
@@ -87,6 +91,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PreviewOutputDir": "预览输出目录",
     "CompareTextDiff": "清洗前后对比",
     "DocFirstPagePreview": "文档首页预览",
+    "FiveDimLabelNode": "五维标注与分类",
+    "CorpusStatCard": "语料规模看板",
 }
 
 

@@ -7,6 +7,7 @@
         --out example/offline_prepared/docx_workflow_test/docx_workflow_test.png
 """
 import argparse
+import json
 from pathlib import Path
 from urllib.parse import quote
 
@@ -15,7 +16,8 @@ from playwright.sync_api import sync_playwright
 COMFY_URL = "http://127.0.0.1:8188"
 
 # 只影响这次无头页面, 不改用户的 ComfyUI 设置: 隐藏小地图和画布左下角的调试信息 (T/I/N/V/FPS)
-HIDE_CSS = '[class*="minimap" i], [class*="toast" i], [class*="sonner" i] { display: none !important; }'
+HIDE_CSS = ('[class*="minimap" i], [class*="toast" i], [class*="sonner" i], '
+            '.graph-canvas-panel div.bottom-0 .p-buttongroup { display: none !important; }')  # 最后一项: 画布右下角缩放控件
 
 LOAD_AND_RUN_JS = """
 async ([workflowPath, runTimeoutMs]) => {
@@ -63,6 +65,23 @@ FRAME_JS = """
 """
 
 
+BOXES_JS = """
+() => {
+  // 节点/分组/运行按钮在页面上的矩形 (CSS 像素), 给 add_highlight.py 画标注用
+  const c = app.canvas, rect = c.canvas.getBoundingClientRect(), s = c.ds.scale, [ox, oy] = c.ds.offset;
+  const toPage = (x, y, w, h) => [rect.left + (x + ox) * s, rect.top + (y + oy) * s, w * s, h * s];
+  const titleH = LiteGraph.NODE_TITLE_HEIGHT || 30;
+  const nodes = app.graph._nodes.map(n => ({kind: 'node', type: n.type, title: n.title || n.type,
+    box: toPage(n.pos[0], n.pos[1] - titleH, n.size[0], n.size[1] + titleH)}));
+  const groups = app.graph._groups.map(g => ({kind: 'group', title: g.title, box: toPage(...g._bounding)}));
+  const buttons = [...document.querySelectorAll('button')]
+    .filter(b => /^\\s*(运行|Run)\\s*$/.test(b.textContent))
+    .map(b => { const r = b.getBoundingClientRect(); return {kind: 'button', title: '运行', box: [r.left, r.top, r.width, r.height]}; });
+  return nodes.concat(groups, buttons);
+}
+"""
+
+
 def shoot(workflow, out_png, width=1600, height=1000, scale=2, run_timeout_s=120):
     out_png = Path(out_png)
     out_png.parent.mkdir(parents=True, exist_ok=True)
@@ -80,7 +99,7 @@ def shoot(workflow, out_png, width=1600, height=1000, scale=2, run_timeout_s=120
         # 去掉 "任务添加到队列" 之类的通知提示 (类名随前端版本变, 按文本找到所在的浮层再隐藏)
         page.evaluate("""() => {
           for (const el of document.querySelectorAll('body *')) {
-            if (el.children.length === 0 && /任务添加到队列|Job queued|jobs? completed/i.test(el.textContent)) {
+            if (el.children.length === 0 && /任务添加到队列|作业已完成|Job queued|jobs? completed/i.test(el.textContent)) {
               // 新版前端: 操作栏下方的圆角提示条; 旧版: fixed 定位的 toast 浮层. 两种都找不到就不动
               let box = el.closest('div.inline-flex.overflow-hidden.rounded-lg');
               if (!box) {
@@ -94,6 +113,12 @@ def shoot(workflow, out_png, width=1600, height=1000, scale=2, run_timeout_s=120
         page.screenshot(path=str(out_png))  # 整页 (含 ComfyUI 界面)
         crop_png = out_png.with_name(out_png.stem + "_分组裁切.png")
         page.screenshot(path=str(crop_png), clip=framed["clip"])  # 只含分组画布
+        # 元素坐标 (换算成 PNG 像素), 整页图直接用; 裁切图需减去 clip 的左上角
+        boxes = [{**b, "box": [round(v * scale) for v in b["box"]]} for b in page.evaluate(BOXES_JS)]
+        clip_px = [round(framed["clip"][k] * scale) for k in ("x", "y", "width", "height")]
+        out_png.with_suffix(".boxes.json").write_text(
+            json.dumps({"png_scale": scale, "crop_clip": clip_px, "elements": boxes}, ensure_ascii=False, indent=1),
+            encoding="utf-8")
         browser.close()
     print(f"运行状态: {status}; 缩放 {framed['scale']:.2f}; 截图 -> {out_png}, {crop_png}")
 

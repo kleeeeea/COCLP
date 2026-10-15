@@ -1,0 +1,5 @@
+{
+  "_说明": "规模看板 '入库文档数' 卡片读取的统计快照 (界面显示路径 /data/corpus/production/edu_multimodal_corpus/document_stats.json, 本地经 config/path_aliases.json 映射到这里). 示意数字, 正式使用前替换为实际统计并修改 caption",
+  "caption": "全量入库语料统计快照（示意）",
+  "文档数": 26800000
+}

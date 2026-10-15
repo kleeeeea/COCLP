@@ -1,0 +1,16 @@
+# 扩展名 -> 格式标注 (规则判定, 不调模型)
+.docx	Word文档
+.doc	Word文档
+.pdf	PDF文档
+.png	图片
+.jpg	图片
+.jpeg	图片
+.mp3	音频转写
+.m4a	音频转写
+.wav	音频转写
+.html	网页
+.htm	网页
+.txt	纯文本
+.md	纯文本
+.json	结构化数据
+.jsonl	结构化数据
