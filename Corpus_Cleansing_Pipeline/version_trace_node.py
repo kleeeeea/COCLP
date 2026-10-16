@@ -67,14 +67,14 @@ def registry_html(registry, current):
     highlight = ' class="q-a"'  # 本次登记的版本整行标绿
     rows = "".join(
         f'<tr{highlight if v["版本号"] == current["版本号"] else ""}><td>{v["版本号"]}</td>'
-        f'<td>{html.escape(v["批次名"])}</td><td>{v["父版本"]}</td><td>{v["记录数"]}</td>'
-        f'<td>{v["指纹"][:12]}…</td><td>{v["登记时间"][5:16]}</td>'
+        f'<td>{v["父版本"]}</td><td>{v["记录数"]}</td>'
+        f'<td>{v["指纹"][:8]}…</td><td>{v["登记时间"][5:16]}</td>'
         f'<td>{("+" + "、".join(v["新增"])) if v["父版本"] != "—" and v["新增"] else ""}'
         f'{(" −" + "、".join(v["移除"])) if v["移除"] else ""}{"首次登记" if v["父版本"] == "—" else ""}</td>'
         f'<td>{html.escape(v["说明"])}</td></tr>' for v in registry)
     return (f'<div class="coclp-summary">版本台账共 {len(registry)} 个版本 · 本次登记 <b class="q-a">{current["版本号"]}</b>'
             f' (父版本 {current["父版本"]})</div>'
-            '<table class="coclp-table"><tr><th>版本号</th><th>批次</th><th>父版本</th><th>记录</th><th>内容指纹</th>'
+            '<table class="coclp-table"><tr><th>版本号</th><th>父版本</th><th>记录</th><th>内容指纹</th>'
             f'<th>登记</th><th>相对父版本</th><th>说明</th></tr>{rows}</table>')
 
 

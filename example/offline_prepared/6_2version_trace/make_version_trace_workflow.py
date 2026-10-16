@@ -65,15 +65,16 @@ def build_workflow():
     batch = add_node("PassThroughDir", "质控后批次 (6.1 剔除 C 档)", (0, 0), (400, 90), [],
                      [("语料目录", "STRING")], [f"{REL}/data/batch_v2"])
     # BatchVersionRegister widgets: [registry_dir, 版本说明]
-    register = add_node("BatchVersionRegister", "批次版本登记 · 版本台账", (460, 0), (780, 460),
+    # 节点宽度收窄, 整体画布变窄, 截图缩放更大、字更清楚 (高亮面板固定高 340, 节点高度由前端撑到 ~480)
+    register = add_node("BatchVersionRegister", "批次版本登记 · 版本台账", (460, 0), (680, 480),
                         [("batch_dir", "STRING")], [("版本台账目录", "STRING")],
                         [f"{REL}/registry", "质控后入库: 剔除 C 档 2 条"])
     # ModelCorpusTrace widgets: [training_jobs, 样本ID, 模型]
-    tracer = add_node("ModelCorpusTrace", "模型-语料双向追溯", (460, 540), (780, 520),
+    tracer = add_node("ModelCorpusTrace", "模型-语料双向追溯", (460, 560), (680, 480),
                       [("registry_dir", "STRING")], [("追溯结果", "STRING")],
                       [f"{REL}/data/训练任务登记.jsonl", "Q06", "静安教育大模型 v1.2"])
     # ComplianceAudit widgets: [privacy_log, output_dir, 审计月份, 覆盖率要求]
-    auditor = add_node("ComplianceAudit", "隐私合规审计 · 月度审计报告", (1300, 0), (620, 560),
+    auditor = add_node("ComplianceAudit", "隐私合规审计 · 月度审计报告", (1200, 0), (560, 480),
                        [("registry_dir", "STRING"), ("batch_dir", "STRING")], [("审计报告目录", "STRING")],
                        [f"{REL}/data/隐私处理日志.jsonl", f"{REL}/output", datetime.now().strftime("%Y-%m"), 1.0])
     add_link(batch, register, 0)
@@ -82,7 +83,7 @@ def build_workflow():
     add_link(batch, auditor, 1)
 
     workflow["groups"].append({"id": 1, "title": "版本管理、双向追溯与合规审计: 批次版本台账 → 模型语料追溯 → 月度合规审计",
-                               "bounding": [-40, -80, 2000, 1180], "color": "#3f789e", "font_size": 24, "flags": {}})
+                               "bounding": [-40, -80, 1840, 1140], "color": "#3f789e", "font_size": 24, "flags": {}})
     DST.write_text(json.dumps(workflow, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"写入 {DST}")
 
