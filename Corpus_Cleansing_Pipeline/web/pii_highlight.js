@@ -28,7 +28,7 @@ const STYLE = `
 `;
 // 4.1 隐私检测合并、4.2 脱敏、6.1 质量评估 / 黄金集质控、3.3 近似去重 都用这个面板显示 ui.html
 const NODE_TYPES = ["PIIMerge", "Desensitizer", "QualityAssess", "GoldenLabelCheck", "SimHashDedup",
-                    "BatchVersionRegister", "ModelCorpusTrace", "ComplianceAudit"];
+                    "BatchVersionRegister", "ModelCorpusTrace", "ComplianceAudit", "ConfidenceNoiseFilter"];
 const PANEL_HEIGHT = 340;
 
 app.registerExtension({

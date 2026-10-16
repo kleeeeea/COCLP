@@ -1,0 +1,162 @@
+{
+  "id": "0ff1e5a0-3a1f-4b1d-9c3e-5c2e7a1b0d15",
+  "revision": 0,
+  "last_node_id": 3,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "PassThroughDir",
+      "title": "OCR 产出 (2.2 MinerU, 含识别置信度)",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        420,
+        90
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "语料目录",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PassThroughDir"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/2_2ocr_workflow_test/output"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "PassThroughDir",
+      "title": "ASR 产出 (2.3 Whisper, 分段置信度)",
+      "pos": [
+        0,
+        160
+      ],
+      "size": [
+        420,
+        90
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "语料目录",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PassThroughDir"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/3_1noise_filter/data/asr_segments.jsonl"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "ConfidenceNoiseFilter",
+      "title": "噪音过滤与置信度筛选 · 保留/剔除清单",
+      "pos": [
+        500,
+        0
+      ],
+      "size": [
+        900,
+        900
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "ocr_dir",
+          "type": "STRING",
+          "link": 1
+        },
+        {
+          "name": "asr_segments",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "保留语料目录",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ConfidenceNoiseFilter"
+      },
+      "widgets_values": [
+        "../example/offline_prepared/3_1noise_filter/output",
+        0.9,
+        0.6,
+        0.6,
+        0.6,
+        4
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "噪音过滤与置信度筛选: OCR/ASR 置信度阈值 + 噪音规则",
+      "bounding": [
+        -40,
+        -80,
+        1480,
+        1040
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

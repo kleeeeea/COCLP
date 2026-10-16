@@ -1,0 +1,64 @@
+{
+ "png_scale": 2,
+ "crop_clip": [
+  526,
+  308,
+  2308,
+  1636
+ ],
+ "elements": [
+  {
+   "kind": "node",
+   "type": "PassThroughDir",
+   "title": "OCR 产出 (2.2 MinerU, 含识别置信度)",
+   "box": [
+    611,
+    408,
+    641,
+    183
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "PassThroughDir",
+   "title": "ASR 产出 (2.3 Whisper, 分段置信度)",
+   "box": [
+    611,
+    653,
+    641,
+    183
+   ]
+  },
+  {
+   "kind": "node",
+   "type": "ConfidenceNoiseFilter",
+   "title": "噪音过滤与置信度筛选 · 保留/剔除清单",
+   "box": [
+    1375,
+    408,
+    1374,
+    1420
+   ]
+  },
+  {
+   "kind": "group",
+   "title": "噪音过滤与置信度筛选: OCR/ASR 置信度阈值 + 噪音规则",
+   "box": [
+    550,
+    332,
+    2260,
+    1588
+   ]
+  },
+  {
+   "kind": "button",
+   "title": "运行",
+   "box": [
+    2564,
+    140,
+    164,
+    64
+   ]
+  }
+ ]
+}

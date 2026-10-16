@@ -29,6 +29,7 @@ from .desensitize_node import Desensitizer
 from .human_audit_node import HumanSampleAudit
 from .quality_control_node import QualityAssess, GoldenLabelCheck, ExpertSampleReview
 from .version_trace_node import BatchVersionRegister, ModelCorpusTrace, ComplianceAudit
+from .noise_filter_node import ConfidenceNoiseFilter
 from .dedup_node import SimHashDedup
 
 # web/preview_dir.js 负责把 PreviewOutputDir 的 ui.text 显示在节点上
@@ -78,6 +79,7 @@ NODE_CLASS_MAPPINGS = {
     "BatchVersionRegister": BatchVersionRegister,
     "ModelCorpusTrace": ModelCorpusTrace,
     "ComplianceAudit": ComplianceAudit,
+    "ConfidenceNoiseFilter": ConfidenceNoiseFilter,
     "SimHashDedup": SimHashDedup,
 
 }
@@ -137,6 +139,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BatchVersionRegister": "批次版本登记",
     "ModelCorpusTrace": "模型-语料双向追溯",
     "ComplianceAudit": "隐私合规审计 (月度报告)",
+    "ConfidenceNoiseFilter": "噪音过滤与置信度筛选",
     "SimHashDedup": "近似去重与达标筛选 (SimHash)",
 }
 
